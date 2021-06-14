@@ -36,7 +36,7 @@
           <grid row="5" column="0" row-span="1" col-span="8" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="2" use-parent-layout="false">
             <preferred-size width="150" height="50"/>
           </grid>
-          <gridbag top="1" left="10" bottom="1" right="10" weightx="1.0" weighty="1.0"/>
+          <gridbag weightx="1.0" weighty="1.0"/>
         </constraints>
         <properties>
           <autoCreateRowSorter value="true"/>
@@ -79,14 +79,13 @@
           <text value="Дата начала выборки"/>
         </properties>
       </component>
-      <component id="fff8e" class="javax.swing.JLabel" binding="jLabelIconBegin">
+      <component id="1d7fd" class="javax.swing.JButton" binding="synchronizeButton">
         <constraints>
-          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
           <gridbag weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
-          <icon value="243-2436720_free-logo-design-download-roho-4senses-co-rh-roho-4senses-3d-logo.png"/>
-          <text value=""/>
+          <text value="Синхронизация"/>
         </properties>
       </component>
     </children>

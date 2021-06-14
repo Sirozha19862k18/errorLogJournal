@@ -21,7 +21,7 @@ public class ErrorLog extends JFrame {
     private JButton saveToFile;
     private JLabel labelTextBegin;
     private  JLabel labelTextEnd;
-    private JLabel jLabelIconBegin;
+    private JButton synchronizeButton;
     private static DefaultTableModel tableModel;
 
 
@@ -37,8 +37,7 @@ public class ErrorLog extends JFrame {
 
         readData.addActionListener(e -> {
             prepareErrorTableForNewAction();
-            SQLQuery queryToSelectByDate = new SQLQuery();
-            queryToSelectByDate.viewErrorBySelectDate(returnTimestamp(spinnerDateBegin), returnTimestamp(spinnerDateEnd));
+            checkSelectedDateByErrors(returnTimestamp(spinnerDateBegin), returnTimestamp(spinnerDateEnd));
             errorTable.setModel(tableModel);
         });
 
@@ -95,8 +94,6 @@ public class ErrorLog extends JFrame {
 
         tableModel.addRow(new String[]{result.getString(1), result.getString(2), result.getString(3),
                 result.getString(4), result.getString(5), result.getString(6)});
-
-
     }
 
     public void prepareErrorTableForNewAction(){
@@ -104,27 +101,36 @@ public class ErrorLog extends JFrame {
         initTableModel();
     }
 
+    // Проверка что дата начала отчета меньше чем дата конца отчета
+    public void checkSelectedDateByErrors(long startTimeInUnixFormat, long endTimeInUnixFormat){
+        if(startTimeInUnixFormat<endTimeInUnixFormat){
+            SQLQuery queryToSelectByDate = new SQLQuery();
+            queryToSelectByDate.viewErrorBySelectDate(startTimeInUnixFormat, endTimeInUnixFormat);
+        }
+        else {
+            JOptionPane.showMessageDialog(mainPanel,
+                    "Дата начала отсчета не может быть больше даты конца отчета",
+                    "Внимание!",
+                    JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
     public  void  addComonentToPane(){
         GridBagLayout myLayout = new GridBagLayout();
         mainPanel.setLayout(myLayout);
-        GridBagConstraints gbc1 = new GridBagConstraints();
-        gbc1.gridx=0;
-        gbc1.gridy=0;
-        gbc1.gridwidth=1;
-        gbc1.gridheight=1;
-        mainPanel.add(jLabelIconBegin, gbc1);
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx=1;
-        gbc.gridy=0;
+        gbc.gridy=1;
         gbc.gridwidth=2;
         gbc.gridheight=2;
+        gbc.anchor=GridBagConstraints.NORTH;
         JPanel selectDatePanel = new JPanel();
         selectDatePanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Выбор даты"));
         GridBagLayout selectDatePanelLayout = new GridBagLayout();
         mainPanel.add(selectDatePanel, gbc);
         selectDatePanel.setLayout(selectDatePanelLayout);
         GridBagConstraints selectDatePanelGBC = new GridBagConstraints();
-        selectDatePanelGBC.insets = new Insets(20,10,20,10);
+        selectDatePanelGBC.insets = new Insets(10,10,20,10);
         selectDatePanelGBC.gridx=0;
         selectDatePanelGBC.gridy=0;
         selectDatePanelGBC.gridwidth=1;
@@ -145,22 +151,35 @@ public class ErrorLog extends JFrame {
         selectDatePanelGBC.gridwidth=1;
         selectDatePanelGBC.gridheight=1;
         selectDatePanel.add(spinnerDateEnd,selectDatePanelGBC);
+        //Button Синхронизация
+        gbc.gridx=0;
+        gbc.gridy=3;
+        gbc.gridwidth=1;
+        gbc.gridheight=1;
+        gbc.insets = new Insets(20,10,20,10);
+        gbc.anchor=GridBagConstraints.WEST;
+        mainPanel.add(synchronizeButton,gbc);
+        //Button Считать данные
         gbc.gridx=1;
         gbc.gridy=3;
         gbc.gridwidth=1;
         gbc.gridheight=1;
         gbc.insets = new Insets(20,10,20,10);
+        gbc.anchor=GridBagConstraints.WEST;
         mainPanel.add(readData,gbc);
+        //Button Сохранить
         gbc.gridx=2;
         gbc.gridy=3;
         gbc.gridwidth=1;
         gbc.gridheight=1;
         gbc.insets = new Insets(20,10,20,10);
+        gbc.anchor=GridBagConstraints.WEST;
+        gbc.fill=GridBagConstraints.NONE;
         mainPanel.add(saveToFile, gbc);
         JScrollPane jScrollPane = new JScrollPane(errorTable);
         gbc.gridx=0;
         gbc.gridy=4;
-        gbc.gridwidth=3;
+        gbc.gridwidth=4;
         gbc.gridheight=2;
         gbc.weightx=1;
         gbc.weighty=1;
