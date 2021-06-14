@@ -36,10 +36,11 @@ public class ErrorLog extends JFrame {
 
 
         readData.addActionListener(e -> {
-            prepareErrorTableForNewAction();
-            checkSelectedDateByErrors(returnTimestamp(spinnerDateBegin), returnTimestamp(spinnerDateEnd));
-            errorTable.setModel(tableModel);
-        });
+                    prepareErrorTableForNewAction();
+                    checkSelectedDateByErrors(returnTimestamp(spinnerDateBegin), returnTimestamp(spinnerDateEnd));
+                    errorTable.setModel(tableModel);
+                    resizeCellInTableByFitContent();
+                });
 
         saveToFile.addActionListener(e -> {
             JFrame parentFrame = new JFrame();
@@ -53,6 +54,24 @@ public class ErrorLog extends JFrame {
         });
     }
 
+    //Изменение размера ячеек таблицы по ширине содержимого
+    public void resizeCellInTableByFitContent(){
+        TableColumnModel tcm = errorTable.getColumnModel();
+        errorTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        for (int column = 0; column < errorTable.getColumnCount(); column++) {
+            int width = 15;
+            for (int row = 0; row < tcm.getColumnCount(); row++) {
+                TableCellRenderer renderer = errorTable.getCellRenderer(row, column);
+                Component comp = errorTable.prepareRenderer(renderer, row, column);
+                width = Math.max(comp.getPreferredSize().width + 10, width);
+            }
+            if (width > 400)
+                width = 400;
+            tcm.getColumn(column).setPreferredWidth(width);
+        }
+    }
+
+      //Установка текущей даты в поля выбра даты и времени
     public void setDateInSpinner(){
         setSpinnerModel(spinnerDateBegin);
         setSpinnerModel(spinnerDateEnd);
@@ -70,6 +89,7 @@ public class ErrorLog extends JFrame {
         errorTable.setModel(tableModel);
     }
 
+   //Перевод времени в Unix Timestamp
     public long returnTimestamp(JSpinner spinner) {
         Date date;
         long unixTime=0;
@@ -82,6 +102,7 @@ public class ErrorLog extends JFrame {
         return unixTime;
     }
 
+    //Установка отображения даты и времени в спиннере
     public void setSpinnerModel(JSpinner spinner){
         SpinnerDateModel model = new SpinnerDateModel(new Date() , null, null, Calendar.SHORT_FORMAT);
         spinner.setModel(model);
@@ -90,12 +111,13 @@ public class ErrorLog extends JFrame {
         spinner.setValue(calendar.getTime());
     }
 
+    //Заполнение таблицы значениями sql выборки
     public static void fillErrorTable(ResultSet result) throws SQLException {
-
         tableModel.addRow(new String[]{result.getString(1), result.getString(2), result.getString(3),
                 result.getString(4), result.getString(5), result.getString(6)});
     }
 
+    //Очистка таблицы перед новым запросом
     public void prepareErrorTableForNewAction(){
         tableModel.setRowCount(0);
         initTableModel();
