@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 
-
 public class ErrorReport {
 
     public long reportDateBegin;
@@ -33,12 +32,12 @@ public class ErrorReport {
     }
 
     //Проверка Дата начала < Даты конца
-  public boolean checkSelectedDateByErrors(){
+    public boolean checkSelectedDateByErrors() {
         return reportDateBegin < reportDateEnd;
     }
 
     //Получение ошибок с БД
-    public void getErrorsFromDB(){
+    public void getErrorsFromDB() {
         SQLQuery sqlQery = new SQLQuery();
         setReportBody(sqlQery.viewErrorBySelectDate(reportDateBegin, reportDateEnd));
     }
