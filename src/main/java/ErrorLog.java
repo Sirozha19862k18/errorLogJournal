@@ -3,8 +3,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.*;
 import java.awt.*;
 import java.io.File;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -15,6 +13,8 @@ import static java.time.ZoneOffset.UTC;
 
 
 public class ErrorLog extends JFrame {
+    ErrorReport errorReport;
+
     private static DefaultTableModel tableModel;
 
     public ErrorLog(String title) throws HeadlessException {
@@ -25,14 +25,14 @@ public class ErrorLog extends JFrame {
         this.setBounds(400, 400, 800, 600);
         initUI();
 
-
+        //Кнопка СЧИТАТЬ ДАННЫЕ
         readData.addActionListener(e -> {
             prepareErrorTableForNewAction();
-            checkSelectedDateByErrors(returnTimestamp(spinnerDateBegin), returnTimestamp(spinnerDateEnd));
+            createReport();
             errorTable.setModel(tableModel);
-            resizeCellInTableByFitContent();
         });
 
+        //Кнопка сохранить отчет
         saveToFile.addActionListener(e -> {
             PDFGenerator pdfGenerator = new PDFGenerator();
             JFrame parentFrame = new JFrame();
@@ -113,10 +113,12 @@ public class ErrorLog extends JFrame {
         spinner.setValue(calendar.getTime());
     }
 
-    //Заполнение таблицы значениями sql выборки
-    public static void fillErrorTable(ResultSet result) throws SQLException {
-        tableModel.addRow(new String[]{result.getString(1), result.getString(2), result.getString(3),
-                result.getString(4), result.getString(5), result.getString(6)});
+    //Заполнение таблицы значениями
+    public void fillErrorTable() {
+        for (int i = 0; i < errorReport.getReportBody().size(); i++) {
+            tableModel.addRow(errorReport.getReportBody().get(i));
+        }
+        resizeCellInTableByFitContent();
     }
 
     //Очистка таблицы перед новым запросом
@@ -126,16 +128,20 @@ public class ErrorLog extends JFrame {
     }
 
     // Проверка что дата начала отчета меньше чем дата конца отчета
-    public void checkSelectedDateByErrors(long startTimeInUnixFormat, long endTimeInUnixFormat) {
-        if (startTimeInUnixFormat < endTimeInUnixFormat) {
-            SQLQuery queryToSelectByDate = new SQLQuery();
-            queryToSelectByDate.viewErrorBySelectDate(startTimeInUnixFormat, endTimeInUnixFormat);
+    public void checkSelectedDateByErrors() {
+        if (errorReport.checkSelectedDateByErrors()) {
+            errorReport.getErrorsFromDB();
+            fillErrorTable();
         } else {
-            JOptionPane.showMessageDialog(mainPanel,
-                    "Дата начала отсчета не может быть больше даты конца отчета",
-                    "Внимание!",
-                    JOptionPane.WARNING_MESSAGE);
+            showAlert("Дата начала отсчета не может быть больше даты конца отчета");
         }
+    }
+
+    public void createReport() {
+        errorReport = new ErrorReport();
+        errorReport.setReportDateBegin(returnTimestamp(spinnerDateBegin));
+        errorReport.setReportDateEnd(returnTimestamp(spinnerDateEnd));
+        checkSelectedDateByErrors();
     }
 
     public void addComonentToPane() {
@@ -211,13 +217,20 @@ public class ErrorLog extends JFrame {
         mainPanel.add(jScrollPane, gbc);
     }
 
-    public static void showAlert(String exception) {
+    //Окно ошибки
+    public static void showError(String exception) {
         JOptionPane.showMessageDialog(new JFrame(),
                 "Произошло исключение" + exception,
                 "Ошибка",
                 JOptionPane.ERROR_MESSAGE);
     }
 
+    public static void showAlert(String message) {
+        JOptionPane.showMessageDialog(new JFrame(),
+                message,
+                "Внимание",
+                JOptionPane.WARNING_MESSAGE);
+    }
 
     private JPanel mainPanel;
     private JSpinner spinnerDateBegin;

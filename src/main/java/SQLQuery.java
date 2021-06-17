@@ -1,5 +1,6 @@
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class SQLQuery {
 
@@ -17,8 +18,9 @@ public class SQLQuery {
         return conn;
     }
 
+    public ArrayList<String[]> viewErrorBySelectDate(long startTimeInUnixFormat, long endTimeInUnixFormat)  {
+        ArrayList<String[]> errorResult = new ArrayList<>();
 
-    public void viewErrorBySelectDate(long startTimeInUnixFormat, long endTimeInUnixFormat)  {
 
         String sql="SELECT ROW_NUMBER() OVER () AS 'Счетчик', event.event_log_index as 'Код ошибки', event_log.language1 as 'Описание', datetime(event.'trigger_time@timestamp', 'unixepoch', 'localtime')  as 'Время появления ошибки' , datetime(event.'recover_time@timestamp', 'unixepoch', 'localtime')   as 'Время окончания ошибки', \n" +
                 "event.WATCH1 as 'Оператор'\n" +
@@ -34,7 +36,9 @@ public class SQLQuery {
              ResultSet result = stmnt.executeQuery(sql))
         {
             while (result.next()){
-              ErrorLog.fillErrorTable(result);
+                String[] row = new String[]{result.getString(1), result.getString(2), result.getString(3), result.getString(4),
+                        result.getString(5), result.getString(6)};
+                errorResult.add(row);
                            }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -46,6 +50,7 @@ public class SQLQuery {
                 throwables.printStackTrace();
             }
         }
-
+return errorResult;
     }
+
 }

@@ -19,22 +19,20 @@ public class PDFGenerator {
     private JTable errorTable;
 
     public void saveAsPDF(File file, JTable errorTable){
-
         this.file=file;
         this.errorTable = errorTable;
-        if(!file.exists()){
-            try {
-                file.createNewFile();
+        System.out.println(file.getAbsolutePath());
+        if(!file.isFile()){
                 try {
                     generatePDF();
                 } catch (Exception e) {
-                    ErrorLog.showAlert(e.getMessage());
+                    ErrorLog.showError(e.getMessage());
                     e.printStackTrace();
                 }
-            } catch (IOException e) {
-                ErrorLog.showAlert(e.getMessage());
-                e.printStackTrace();
-            }
+        }
+        else {
+            System.out.println("Файл существует");
+
         }
     }
 
@@ -53,7 +51,7 @@ public class PDFGenerator {
             document.add(paragraph);
             document.add(new Chunk());
         } catch (DocumentException e) {
-            ErrorLog.showAlert(e.getMessage());
+            ErrorLog.showError(e.getMessage());
             e.printStackTrace();
         }
 
@@ -74,7 +72,7 @@ public class PDFGenerator {
         try {
             document.add(table);
         } catch (DocumentException e) {
-            ErrorLog.showAlert(e.getMessage());
+            ErrorLog.showError(e.getMessage());
             e.printStackTrace();
         }
     }
@@ -85,7 +83,7 @@ public class PDFGenerator {
         try {
             baseFont = BaseFont.createFont("font.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
         } catch (DocumentException | IOException e )  {
-            ErrorLog.showAlert(e.getMessage());
+            ErrorLog.showError(e.getMessage());
             e.printStackTrace();
         }
         reportTableFont = new Font(baseFont, 10);
@@ -97,7 +95,7 @@ public class PDFGenerator {
         try {
             PdfWriter.getInstance(document, new FileOutputStream(file));
         } catch (DocumentException | FileNotFoundException e ) {
-            ErrorLog.showAlert(e.getMessage());
+            ErrorLog.showError(e.getMessage());
             e.printStackTrace();
         }
         document.open();
