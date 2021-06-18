@@ -17,8 +17,10 @@ public class PDFGenerator {
     private com.itextpdf.text.Document document;
     private File file;
     private JTable errorTable;
+    private ErrorReport errorReport;
 
-    public void saveAsPDF(File file, JTable errorTable) {
+    public void saveAsPDF(File file, JTable errorTable, ErrorReport errorReport) {
+        this.errorReport = errorReport;
         this.file = file;
         this.errorTable = errorTable;
         if (!file.isFile()) {
@@ -28,8 +30,6 @@ public class PDFGenerator {
                 ErrorLog.showError(e.getMessage());
                 e.printStackTrace();
             }
-        } else {
-            System.out.println("Файл существует");
         }
     }
 
@@ -42,7 +42,7 @@ public class PDFGenerator {
     }
 
     public void generateHeaderOfReport() {
-        Paragraph paragraph = new Paragraph("Отчет по ошибкам за период ", headerTableFont);
+        Paragraph paragraph = new Paragraph("Отчет по ошибкам за период " + errorReport.getErrorReportHumanViewDate(), headerTableFont);
         paragraph.setAlignment(Paragraph.ALIGN_CENTER);
         try {
             document.add(paragraph);

@@ -9,7 +9,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import org.jdesktop.layout.GroupLayout;
@@ -133,11 +132,6 @@ public class ErrorLog extends JFrame {
                 JOptionPane.WARNING_MESSAGE);
     }
 
-
-
-
-
-
     private void readDateMenuItemActionPerformed(ActionEvent e) {
         readDataActionPerformed(e);
     }
@@ -174,16 +168,23 @@ public class ErrorLog extends JFrame {
             }
             if (!fileToSave.getName().toLowerCase().endsWith(".pdf")) {
                 fileToSave = new File(fileToSave.getParentFile(), fileToSave.getName() + ".pdf");
-                pdfGenerator.saveAsPDF(fileToSave, errorTable);
+                pdfGenerator.saveAsPDF(fileToSave, errorTable, errorReport);
+                JOptionPane.showMessageDialog(new JFrame(),
+                        "Файл '" + fileChooser.getSelectedFile() +
+                                "  сохранен");
+            }
+            else {
+                JOptionPane.showMessageDialog(new JFrame(),
+                        "Файл  '" + fileChooser.getSelectedFile() +
+                                "  не был сохранен \n" +
+                                "Вероятно, файл с таким именем уже существует",
+                        "Ошибка",
+                        JOptionPane.ERROR_MESSAGE);
             }
         }
     }
 
-    private void button1ActionPerformed(ActionEvent e) throws UnsupportedLookAndFeelException {
-        UIManager.setLookAndFeel(new FlatLightLaf());
-        initComponents();
-        prepareUIComponents();
-    }
+
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
@@ -273,9 +274,9 @@ public class ErrorLog extends JFrame {
                 //---- readData ----
                 readData.setText("\u0421\u0447\u0438\u0442\u0430\u0442\u044c \u0434\u0430\u043d\u043d\u044b\u0435");
                 readData.addActionListener(e -> {
-			readDataActionPerformed(e);
-			readDataActionPerformed(e);
-		});
+                    readDataActionPerformed(e);
+                    readDataActionPerformed(e);
+                });
 
                 //---- saveToFile ----
                 saveToFile.setText("\u0421\u043e\u0445\u0440\u0430\u043d\u0438\u0442\u044c \u043e\u0442\u0447\u0435\u0442");
@@ -284,77 +285,77 @@ public class ErrorLog extends JFrame {
                 GroupLayout panel2Layout = new GroupLayout(panel2);
                 panel2.setLayout(panel2Layout);
                 panel2Layout.setHorizontalGroup(
-                    panel2Layout.createParallelGroup()
-                        .add(panel2Layout.createSequentialGroup()
-                            .add(label1)
-                            .addPreferredGap(LayoutStyle.RELATED)
-                            .add(spinnerDateBegin, GroupLayout.PREFERRED_SIZE, 271, GroupLayout.PREFERRED_SIZE)
-                            .add(0, 0, Short.MAX_VALUE))
-                        .add(panel2Layout.createSequentialGroup()
-                            .add(label2, GroupLayout.PREFERRED_SIZE, 153, GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(LayoutStyle.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .add(panel2Layout.createParallelGroup(GroupLayout.LEADING, false)
+                        panel2Layout.createParallelGroup()
                                 .add(panel2Layout.createSequentialGroup()
-                                    .add(readData, GroupLayout.PREFERRED_SIZE, 130, GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(LayoutStyle.RELATED)
-                                    .add(saveToFile, GroupLayout.PREFERRED_SIZE, 130, GroupLayout.PREFERRED_SIZE)
-                                    .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .add(GroupLayout.TRAILING, panel2Layout.createSequentialGroup()
-                                    .add(spinnerDateEnd, GroupLayout.PREFERRED_SIZE, 271, GroupLayout.PREFERRED_SIZE)
-                                    .add(125, 125, 125))))
+                                        .add(label1)
+                                        .addPreferredGap(LayoutStyle.RELATED)
+                                        .add(spinnerDateBegin, GroupLayout.PREFERRED_SIZE, 271, GroupLayout.PREFERRED_SIZE)
+                                        .add(0, 0, Short.MAX_VALUE))
+                                .add(panel2Layout.createSequentialGroup()
+                                        .add(label2, GroupLayout.PREFERRED_SIZE, 153, GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(LayoutStyle.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .add(panel2Layout.createParallelGroup(GroupLayout.LEADING, false)
+                                                .add(panel2Layout.createSequentialGroup()
+                                                        .add(readData, GroupLayout.PREFERRED_SIZE, 130, GroupLayout.PREFERRED_SIZE)
+                                                        .addPreferredGap(LayoutStyle.RELATED)
+                                                        .add(saveToFile, GroupLayout.PREFERRED_SIZE, 130, GroupLayout.PREFERRED_SIZE)
+                                                        .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                .add(GroupLayout.TRAILING, panel2Layout.createSequentialGroup()
+                                                        .add(spinnerDateEnd, GroupLayout.PREFERRED_SIZE, 271, GroupLayout.PREFERRED_SIZE)
+                                                        .add(125, 125, 125))))
                 );
                 panel2Layout.setVerticalGroup(
-                    panel2Layout.createParallelGroup()
-                        .add(panel2Layout.createSequentialGroup()
-                            .add(22, 22, 22)
-                            .add(panel2Layout.createParallelGroup(GroupLayout.BASELINE)
-                                .add(spinnerDateBegin, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                .add(label1))
-                            .addPreferredGap(LayoutStyle.RELATED)
-                            .add(panel2Layout.createParallelGroup(GroupLayout.BASELINE)
-                                .add(spinnerDateEnd, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                .add(label2))
-                            .add(18, 18, 18)
-                            .add(panel2Layout.createParallelGroup(GroupLayout.BASELINE)
-                                .add(readData, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .add(saveToFile, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addContainerGap())
+                        panel2Layout.createParallelGroup()
+                                .add(panel2Layout.createSequentialGroup()
+                                        .add(22, 22, 22)
+                                        .add(panel2Layout.createParallelGroup(GroupLayout.BASELINE)
+                                                .add(spinnerDateBegin, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                                .add(label1))
+                                        .addPreferredGap(LayoutStyle.RELATED)
+                                        .add(panel2Layout.createParallelGroup(GroupLayout.BASELINE)
+                                                .add(spinnerDateEnd, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                                .add(label2))
+                                        .add(18, 18, 18)
+                                        .add(panel2Layout.createParallelGroup(GroupLayout.BASELINE)
+                                                .add(readData, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .add(saveToFile, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addContainerGap())
                 );
             }
 
             GroupLayout panel1Layout = new GroupLayout(panel1);
             panel1.setLayout(panel1Layout);
             panel1Layout.setHorizontalGroup(
-                panel1Layout.createParallelGroup()
-                    .add(panel1Layout.createSequentialGroup()
-                        .add(5, 5, 5)
-                        .add(scrollPane1, GroupLayout.DEFAULT_SIZE, 918, Short.MAX_VALUE)
-                        .add(5, 5, 5))
-                    .add(panel1Layout.createSequentialGroup()
-                        .add(201, 201, 201)
-                        .add(panel2, GroupLayout.PREFERRED_SIZE, 484, GroupLayout.PREFERRED_SIZE)
-                        .add(72, 243, Short.MAX_VALUE))
+                    panel1Layout.createParallelGroup()
+                            .add(panel1Layout.createSequentialGroup()
+                                    .add(5, 5, 5)
+                                    .add(scrollPane1, GroupLayout.DEFAULT_SIZE, 918, Short.MAX_VALUE)
+                                    .add(5, 5, 5))
+                            .add(panel1Layout.createSequentialGroup()
+                                    .add(201, 201, 201)
+                                    .add(panel2, GroupLayout.PREFERRED_SIZE, 484, GroupLayout.PREFERRED_SIZE)
+                                    .add(72, 243, Short.MAX_VALUE))
             );
             panel1Layout.setVerticalGroup(
-                panel1Layout.createParallelGroup()
-                    .add(panel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .add(panel2, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(LayoutStyle.RELATED)
-                        .add(scrollPane1, GroupLayout.DEFAULT_SIZE, 341, Short.MAX_VALUE)
-                        .add(5, 5, 5))
+                    panel1Layout.createParallelGroup()
+                            .add(panel1Layout.createSequentialGroup()
+                                    .addContainerGap()
+                                    .add(panel2, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addPreferredGap(LayoutStyle.RELATED)
+                                    .add(scrollPane1, GroupLayout.DEFAULT_SIZE, 341, Short.MAX_VALUE)
+                                    .add(5, 5, 5))
             );
         }
 
         GroupLayout contentPaneLayout = new GroupLayout(contentPane);
         contentPane.setLayout(contentPaneLayout);
         contentPaneLayout.setHorizontalGroup(
-            contentPaneLayout.createParallelGroup()
-                .add(panel1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                contentPaneLayout.createParallelGroup()
+                        .add(panel1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         contentPaneLayout.setVerticalGroup(
-            contentPaneLayout.createParallelGroup()
-                .add(panel1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                contentPaneLayout.createParallelGroup()
+                        .add(panel1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         setSize(930, 555);
         setLocationRelativeTo(getOwner());

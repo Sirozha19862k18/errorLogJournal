@@ -1,17 +1,27 @@
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class ErrorReport {
 
     public long reportDateBegin;
     public long reportDateEnd;
     public ArrayList<String[]> reportBody;
+    public String errorReportHumanViewDate;
+
+    public String getErrorReportHumanViewDate() {
+        return errorReportHumanViewDate;
+    }
+
+    public void setErrorReportHumanViewDate() {
+     errorReportHumanViewDate = timeHumanViewConverter(getReportDateBegin())+" - "+ timeHumanViewConverter(getReportDateEnd());
+    }
 
     public long getReportDateBegin() {
         return reportDateBegin;
     }
 
     public void setReportDateBegin(long unixtime) {
-
         this.reportDateBegin = unixtime;
     }
 
@@ -21,6 +31,7 @@ public class ErrorReport {
 
     public void setReportDateEnd(long unixtime) {
         this.reportDateEnd = unixtime;
+        setErrorReportHumanViewDate();
     }
 
     public ArrayList<String[]> getReportBody() {
@@ -42,5 +53,11 @@ public class ErrorReport {
         setReportBody(sqlQery.viewErrorBySelectDate(reportDateBegin, reportDateEnd));
     }
 
+    //Конвертер с UnixTime в строку
+    private String timeHumanViewConverter(long time){
+        Date date = new java.util.Date(time*1000L);
+        SimpleDateFormat sdf = new java.text.SimpleDateFormat(Constants.HUMAN_DATE_FORMAT);
+        return sdf.format(date);
+    }
 
 }
