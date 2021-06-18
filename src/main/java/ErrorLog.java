@@ -1,3 +1,4 @@
+import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.*;
@@ -10,6 +11,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatLightLaf;
 import org.jdesktop.layout.GroupLayout;
 import org.jdesktop.layout.LayoutStyle;
 
@@ -131,13 +133,34 @@ public class ErrorLog extends JFrame {
                 JOptionPane.WARNING_MESSAGE);
     }
 
-    private void readDataActionPerformed() {
+
+
+
+
+
+    private void readDateMenuItemActionPerformed(ActionEvent e) {
+        readDataActionPerformed(e);
+    }
+
+    private void saveDataMenuItemActionPerformed(ActionEvent e) {
+        saveToFileActionPerformed(e);
+    }
+
+    private void menuItem3ActionPerformed(ActionEvent e) {
+        JOptionPane.showMessageDialog(new JFrame(),
+                "Программа учета аварий и внештатных ситуаций, произошедших на оборудовании. \n" +
+                        "Составляет файл отчета в формате PDF на выбранную дату.",
+                "О программе",
+                JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private void readDataActionPerformed(ActionEvent e) {
         prepareErrorTableForNewAction();
         createReport();
         errorTable.setModel(tableModel);
     }
 
-    private void saveToFileActionPerformed() {
+    private void saveToFileActionPerformed(ActionEvent e) {
         PDFGenerator pdfGenerator = new PDFGenerator();
         JFrame parentFrame = new JFrame();
         JFileChooser fileChooser = new JFileChooser();
@@ -153,25 +176,13 @@ public class ErrorLog extends JFrame {
                 fileToSave = new File(fileToSave.getParentFile(), fileToSave.getName() + ".pdf");
                 pdfGenerator.saveAsPDF(fileToSave, errorTable);
             }
-
-
         }
     }
 
-    private void readDateMenuItemActionPerformed() {
-        readDataActionPerformed();
-    }
-
-    private void saveDataMenuItemActionPerformed() {
-        saveToFileActionPerformed();
-    }
-
-    private void menuItem3ActionPerformed() {
-        JOptionPane.showMessageDialog(new JFrame(),
-                "Программа учета аварий и внештатных ситуаций, произошедших на оборудовании. \n" +
-                        "Составляет файл отчета в формате PDF на выбранную дату.",
-                "О программе",
-                JOptionPane.INFORMATION_MESSAGE);
+    private void button1ActionPerformed(ActionEvent e) throws UnsupportedLookAndFeelException {
+        UIManager.setLookAndFeel(new FlatLightLaf());
+        initComponents();
+        prepareUIComponents();
     }
 
     private void initComponents() {
@@ -209,12 +220,12 @@ public class ErrorLog extends JFrame {
 
                 //---- readDateMenuItem ----
                 readDateMenuItem.setText("\u0421\u0447\u0438\u0442\u0430\u0442\u044c \u0434\u0430\u043d\u043d\u044b\u0435");
-                readDateMenuItem.addActionListener(e -> readDateMenuItemActionPerformed());
+                readDateMenuItem.addActionListener(e -> readDateMenuItemActionPerformed(e));
                 menu1.add(readDateMenuItem);
 
                 //---- saveDataMenuItem ----
                 saveDataMenuItem.setText("\u0421\u043e\u0445\u0440\u0430\u043d\u0438\u0442\u044c \u043e\u0442\u0447\u0435\u0442");
-                saveDataMenuItem.addActionListener(e -> saveDataMenuItemActionPerformed());
+                saveDataMenuItem.addActionListener(e -> saveDataMenuItemActionPerformed(e));
                 menu1.add(saveDataMenuItem);
             }
             menuBar1.add(menu1);
@@ -225,7 +236,7 @@ public class ErrorLog extends JFrame {
 
                 //---- menuItem3 ----
                 menuItem3.setText("\u041e \u043f\u0440\u043e\u0433\u0440\u0430\u043c\u043c\u0435");
-                menuItem3.addActionListener(e -> menuItem3ActionPerformed());
+                menuItem3.addActionListener(e -> menuItem3ActionPerformed(e));
                 menu2.add(menuItem3);
             }
             menuBar1.add(menu2);
@@ -262,13 +273,13 @@ public class ErrorLog extends JFrame {
                 //---- readData ----
                 readData.setText("\u0421\u0447\u0438\u0442\u0430\u0442\u044c \u0434\u0430\u043d\u043d\u044b\u0435");
                 readData.addActionListener(e -> {
-			readDataActionPerformed();
-			readDataActionPerformed();
+			readDataActionPerformed(e);
+			readDataActionPerformed(e);
 		});
 
                 //---- saveToFile ----
                 saveToFile.setText("\u0421\u043e\u0445\u0440\u0430\u043d\u0438\u0442\u044c \u043e\u0442\u0447\u0435\u0442");
-                saveToFile.addActionListener(e -> saveToFileActionPerformed());
+                saveToFile.addActionListener(e -> saveToFileActionPerformed(e));
 
                 GroupLayout panel2Layout = new GroupLayout(panel2);
                 panel2.setLayout(panel2Layout);
@@ -322,7 +333,7 @@ public class ErrorLog extends JFrame {
                     .add(panel1Layout.createSequentialGroup()
                         .add(201, 201, 201)
                         .add(panel2, GroupLayout.PREFERRED_SIZE, 484, GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(243, Short.MAX_VALUE))
+                        .add(72, 243, Short.MAX_VALUE))
             );
             panel1Layout.setVerticalGroup(
                 panel1Layout.createParallelGroup()

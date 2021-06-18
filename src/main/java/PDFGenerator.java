@@ -21,7 +21,6 @@ public class PDFGenerator {
     public void saveAsPDF(File file, JTable errorTable) {
         this.file = file;
         this.errorTable = errorTable;
-        System.out.println(file.getAbsolutePath());
         if (!file.isFile()) {
             try {
                 generatePDF();
@@ -31,7 +30,6 @@ public class PDFGenerator {
             }
         } else {
             System.out.println("Файл существует");
-
         }
     }
 
@@ -65,7 +63,6 @@ public class PDFGenerator {
                 if (rowCounter < 1) {
                     pcell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 }
-
                 table.addCell(pcell);
             }
         }
@@ -80,7 +77,7 @@ public class PDFGenerator {
     private void prepareFontSet() {
         BaseFont baseFont = null;
         try {
-            baseFont = BaseFont.createFont("font.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+            baseFont = BaseFont.createFont("fonts/font.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
         } catch (DocumentException | IOException e) {
             ErrorLog.showError(e.getMessage());
             e.printStackTrace();

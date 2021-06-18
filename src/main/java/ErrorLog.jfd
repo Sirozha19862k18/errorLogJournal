@@ -14,7 +14,7 @@ new FormModel {
 			"$sizePolicy": 1
 			"iconImage": new com.jformdesigner.model.SwingIcon( 0, "/icons/title.png" )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-				"$horizontalGroup": "par l {seq l {space :p:5:p, comp scrollPane1::::918:x, space :p:5:p}, seq l {space :p:201:p, comp panel2:::p:484:p, space ::243:x}}"
+				"$horizontalGroup": "par l {seq l {space :p:5:p, comp scrollPane1::::918:x, space :p:5:p}, seq l {space :p:201:p, comp panel2:::p:484:p, space :72:243:x}}"
 				"$verticalGroup": "par l {seq l {space :::p, comp panel2:::::x, space :::p, comp scrollPane1::::341:x, space :p:5:p}}"
 			} ) {
 				name: "panel1"
