@@ -53,7 +53,7 @@ new FormModel {
 					} )
 					add( new FormComponent( "javax.swing.JButton" ) {
 						name: "readData"
-						"text": "Считать данные"
+						"text": "Вывести отчет "
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "readDataActionPerformed", true ) )
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "readDataActionPerformed", true ) )
 					} )

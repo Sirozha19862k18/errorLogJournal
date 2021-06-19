@@ -329,7 +329,7 @@ public class ErrorLog extends JFrame {
                 label2.setFont(new Font("Segoe UI", Font.BOLD, 14));
 
                 //---- readData ----
-                readData.setText("\u0421\u0447\u0438\u0442\u0430\u0442\u044c \u0434\u0430\u043d\u043d\u044b\u0435");
+                readData.setText("\u0412\u044b\u0432\u0435\u0441\u0442\u0438 \u043e\u0442\u0447\u0435\u0442 ");
                 readData.addActionListener(e -> {
 			readDataActionPerformed(e);
 			readDataActionPerformed(e);
