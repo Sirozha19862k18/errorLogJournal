@@ -27,7 +27,7 @@ title __JAVA's Class Diagram__\n
         + ErrorLog()
         + addComonentToPane()
         + checkSelectedDateByErrors()
-        {static} + fillErrorTable()
+        fillErrorTable()
         + initTableModel()
         + initUI()
         + prepareErrorTableForNewAction()

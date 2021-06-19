@@ -8,6 +8,15 @@ public class ErrorReport {
     public long reportDateEnd;
     public ArrayList<String[]> reportBody;
     public String errorReportHumanViewDate;
+    public String errordatabaseFilePath;
+
+    public String getErrordatabaseFilePath() {
+        return errordatabaseFilePath;
+    }
+
+    public void setErrordatabaseFilePath(String errordatabaseFilePath) {
+        this.errordatabaseFilePath = errordatabaseFilePath;
+    }
 
     public String getErrorReportHumanViewDate() {
         return errorReportHumanViewDate;
@@ -47,11 +56,6 @@ public class ErrorReport {
         return reportDateBegin < reportDateEnd;
     }
 
-    //Получение ошибок с БД
-    public void getErrorsFromDB() {
-        SQLQuery sqlQery = new SQLQuery();
-        setReportBody(sqlQery.viewErrorBySelectDate(reportDateBegin, reportDateEnd));
-    }
 
     //Конвертер с UnixTime в строку
     private String timeHumanViewConverter(long time){

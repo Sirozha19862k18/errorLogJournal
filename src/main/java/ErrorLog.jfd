@@ -14,8 +14,8 @@ new FormModel {
 			"$sizePolicy": 1
 			"iconImage": new com.jformdesigner.model.SwingIcon( 0, "/icons/title.png" )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-				"$horizontalGroup": "par l {seq l {space :p:5:p, comp scrollPane1::::918:x, space :p:5:p}, seq l {space :p:201:p, comp panel2:::p:484:p, space :72:243:x}}"
-				"$verticalGroup": "par l {seq l {space :::p, comp panel2:::::x, space :::p, comp scrollPane1::::341:x, space :p:5:p}}"
+				"$horizontalGroup": "par l {seq l {space :p:5:p, comp scrollPane1::::918:x, space :p:5:p}, seq l {space :::p, comp iconLabel:::p::p, space :p:124:p, comp panel2:::p:484:p, space ::206:x}}"
+				"$verticalGroup": "par l {seq l {par l {seq {space :::p, comp panel2:::::x, space :::p}, seq l {space :p:18:p, comp iconLabel:::p::p, space :::x}}, comp scrollPane1::::341:x, space :p:5:p}}"
 			} ) {
 				name: "panel1"
 				add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
@@ -63,6 +63,10 @@ new FormModel {
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "saveToFileActionPerformed", true ) )
 					} )
 				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "iconLabel"
+					"icon": new com.jformdesigner.model.SwingIcon( 0, "/icons/data.png" )
+				} )
 			} )
 			menuBar: new FormContainer( "javax.swing.JMenuBar", new FormLayoutManager( class javax.swing.JMenuBar ) ) {
 				name: "menuBar1"
@@ -70,14 +74,31 @@ new FormModel {
 					name: "menu1"
 					"text": "Файл"
 					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "openFileMenuItem"
+						"text": "Открыть файл"
+						"icon": new com.jformdesigner.model.SwingIcon( 0, "/icons/open.png" )
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "openFileMenuItemActionPerformed", true ) )
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
 						name: "readDateMenuItem"
 						"text": "Считать данные"
+						"icon": new com.jformdesigner.model.SwingIcon( 0, "/icons/readData.png" )
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "readDateMenuItemActionPerformed", true ) )
 					} )
 					add( new FormComponent( "javax.swing.JMenuItem" ) {
 						name: "saveDataMenuItem"
 						"text": "Сохранить отчет"
+						"icon": new com.jformdesigner.model.SwingIcon( 0, "/icons/save.png" )
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "saveDataMenuItemActionPerformed", true ) )
+					} )
+				} )
+				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+					name: "menu3"
+					"text": "Панель"
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "connectToPanelMenuItem"
+						"text": "Подключиться..."
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "connectToPanelMenuItemActionPerformed", true ) )
 					} )
 				} )
 				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
@@ -86,6 +107,7 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JMenuItem" ) {
 						name: "menuItem3"
 						"text": "О программе"
+						"icon": new com.jformdesigner.model.SwingIcon( 0, "/icons/Help.png" )
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItem3ActionPerformed", true ) )
 					} )
 				} )

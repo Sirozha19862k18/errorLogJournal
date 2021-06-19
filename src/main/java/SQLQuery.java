@@ -4,11 +4,13 @@ import java.util.ArrayList;
 
 public class SQLQuery {
 
-    private Connection connectToDB() {
+
+    private Connection connectToDB(ErrorReport errorReport) {
         Connection conn = null;
         try {
             // db parameters
-            String url = Constants.PATH_TO_DB_FILE;
+
+            String url = Constants.PREFIX_PATH_TO_DB_FILE+errorReport.getErrordatabaseFilePath();
             // create a connection to the database
             conn = DriverManager.getConnection(url);
 
@@ -18,7 +20,7 @@ public class SQLQuery {
         return conn;
     }
 
-    public ArrayList<String[]> viewErrorBySelectDate(long startTimeInUnixFormat, long endTimeInUnixFormat) {
+    public ArrayList<String[]> viewErrorBySelectDate(ErrorReport errorReport) {
         ArrayList<String[]> errorResult = new ArrayList<>();
 
 
@@ -26,12 +28,12 @@ public class SQLQuery {
                 "event.WATCH1 as 'Оператор'\n" +
                 "FROM event \n" +
                 "INNER JOIN event_log ON event.event_log_index=event_log.event_log_index\n" +
-                "WHERE event.'recover_time@timestamp' NOT NULL AND event.'trigger_time@timestamp' > " + startTimeInUnixFormat +
-                "\n AND event.'recover_time@timestamp'<" + endTimeInUnixFormat +
+                "WHERE event.'recover_time@timestamp' NOT NULL AND event.'trigger_time@timestamp' > " +errorReport.getReportDateBegin() +
+                "\n AND event.'recover_time@timestamp'<" + errorReport.getReportDateEnd() +
                 "\n ORDER BY event.'trigger_time@timestamp' ASC\n" +
                 "\n";
 
-        Connection conn = this.connectToDB();
+        Connection conn = this.connectToDB(errorReport);
         try (Statement stmnt = conn.createStatement();
              ResultSet result = stmnt.executeQuery(sql)) {
             while (result.next()) {
