@@ -17,6 +17,7 @@ public class HMI {
         try {
             ftpClient.connect(server, port);
             ftpClient.login(user, pass);
+
             copyDBFileFromHMI();
         } catch (IOException e) {
             ErrorLog.showError(e+ "\nНе удалось подключиться к панели опреатора.\n" +
@@ -31,7 +32,7 @@ public class HMI {
                     ftpClient.disconnect();
                 }
             } catch (IOException ex) {
-                ex.printStackTrace();
+                ErrorLog.showError(ex.toString());
             }
         }
         return downloadFile.getAbsolutePath();
@@ -49,8 +50,11 @@ public class HMI {
             {
                 ErrorLog.showOKMessage("База данных ошибок успешно скопирована с панели опретатора");
             }
+            else               {
+                ErrorLog.showOKMessage("Фигня");
+            }
         } catch (IOException e) {
-            e.printStackTrace();
+            ErrorLog.showError(e.toString());
         }
     }
 }
