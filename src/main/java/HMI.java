@@ -7,22 +7,39 @@ public class HMI {
 
     FTPClient ftpClient;
     File downloadFile;
+    String ip;
+    String password;
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
 
     public String connectToHMI()  {
-        String server = Constants.HMI_ADRESS;
         int port = Constants.HMI_PORT;
         String user = Constants.HMI_USER;
-        String pass = Constants.HMI_PASS;
         ftpClient = new FTPClient();
         try {
-            ftpClient.connect(server, port);
-            ftpClient.login(user, pass);
+            ftpClient.connect(ip, port);
+            ftpClient.login(user, password);
+
 
             copyDBFileFromHMI();
         } catch (IOException e) {
             ErrorLog.showError(e+ "\nНе удалось подключиться к панели опреатора.\n" +
                     "Проверьте сетевые настройки панели \n" +
-                    "Адрес панели должен быть 192.168.0.3\n");
+                    "Адрес панели должен быть " +ip);
             e.printStackTrace();
         }
         finally {
