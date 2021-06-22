@@ -87,7 +87,7 @@ new FormModel {
 					} )
 					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
 						"$horizontalGroup": "par l {seq l {space ::45:x, comp panel9:::p::p, space ::62:x}}"
-						"$verticalGroup": "par l {seq l {space ::18:x, comp panel9:::p::p, space ::418:x}}"
+						"$verticalGroup": "par l {seq l {space ::13:x, comp panel9:::p::p, space ::423:x}}"
 					} ) {
 						name: "panel8"
 						add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {

@@ -3,14 +3,13 @@ import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.*;
-import javax.swing.text.MaskFormatter;
 import java.awt.*;
 import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.util.*;
+import java.util.Timer;
+
 import com.formdev.flatlaf.FlatDarkLaf;
 import org.jdesktop.layout.GroupLayout;
 import org.jdesktop.layout.LayoutStyle;
@@ -20,12 +19,15 @@ import static java.time.ZoneOffset.UTC;
 public class ErrorLog extends JFrame {
     ErrorReport errorReport;
     private DefaultTableModel tableModel;
+    private JDialog dialog;
+    private HMI connection;
 
-    public ErrorLog() throws UnsupportedLookAndFeelException, ParseException {
+    public ErrorLog() throws UnsupportedLookAndFeelException {
         UIManager.setLookAndFeel(new FlatDarkLaf());
         initComponents();
         prepareUIComponents();
         errorReport = new ErrorReport();
+
     }
 
     //Изменение размера ячеек таблицы по ширине содержимого
@@ -51,12 +53,13 @@ public class ErrorLog extends JFrame {
         setSpinnerModel(spinnerDateEnd);
     }
 
-
+  //Установка моделей компонентов
     public void prepareUIComponents() {
         initTableModel();
         setDateInSpinner();
     }
 
+   //Модель отображения таблицы ошибок
     public void initTableModel() {
         tableModel = new DefaultTableModel(0, 6);
         tableModel.addRow(Constants.TABLEHEADER);
@@ -109,6 +112,7 @@ public class ErrorLog extends JFrame {
         }
     }
 
+    //Создание отчета
     public void createReport() {
         errorReport.setReportDateBegin(returnTimestamp(spinnerDateBegin));
         errorReport.setReportDateEnd(returnTimestamp(spinnerDateEnd));
@@ -136,15 +140,16 @@ public class ErrorLog extends JFrame {
                 JOptionPane.WARNING_MESSAGE);
     }
 
-    public static void showOKMessage(String message){
+    public static void showOKMessage(String message) {
         JOptionPane.showMessageDialog(new JFrame(),
                 message,
                 "Успешное завершение операции",
                 JOptionPane.INFORMATION_MESSAGE);
     }
 
-    private boolean  checkDatabasePathToExist(){
-        boolean result ;
+    //Проверка пути к БД ошибок на существование
+    private boolean checkDatabasePathToExist() {
+        boolean result;
         result = errorReport.getErrordatabaseFilePath() != null;
         return result;
     }
@@ -165,14 +170,15 @@ public class ErrorLog extends JFrame {
                 JOptionPane.INFORMATION_MESSAGE);
     }
 
+
     private void readDataActionPerformed(ActionEvent e) {
-        if (!checkDatabasePathToExist()){
+        if (!checkDatabasePathToExist()) {
             showAlert("Не выбран файл журнала ошибок");
+        } else {
+            prepareErrorTableForNewAction();
+            createReport();
+            errorTable.setModel(tableModel);
         }
-        else{
-        prepareErrorTableForNewAction();
-        createReport();
-        errorTable.setModel(tableModel);}
     }
 
     private void saveToFileActionPerformed(ActionEvent e) {
@@ -192,8 +198,7 @@ public class ErrorLog extends JFrame {
                 JOptionPane.showMessageDialog(new JFrame(),
                         "Файл '" + fileChooser.getSelectedFile() +
                                 "  сохранен");
-            }
-            else {
+            } else {
                 JOptionPane.showMessageDialog(new JFrame(),
                         "Файл  '" + fileChooser.getSelectedFile() +
                                 "  не был сохранен \n" +
@@ -208,32 +213,56 @@ public class ErrorLog extends JFrame {
         JFileChooser openFileChooser = new JFileChooser();
         openFileChooser.setDialogTitle("Открыть файл отчета");
         openFileChooser.setFileFilter(new FileNameExtensionFilter("Файл журнала ошибок", "db"));
-        if(openFileChooser.showOpenDialog(new JFrame()) == JFileChooser.APPROVE_OPTION){
+        if (openFileChooser.showOpenDialog(new JFrame()) == JFileChooser.APPROVE_OPTION) {
             File fileToOpen = openFileChooser.getSelectedFile();
-                errorReport.setErrordatabaseFilePath(fileToOpen.getPath());
+            errorReport.setErrordatabaseFilePath(fileToOpen.getPath());
         }
     }
 
     private void connectToPanelMenuItemActionPerformed(ActionEvent e) {
-       HMI connection = new HMI();
-       connection.setIp(constructHMIIP());
-       connection.setPassword(passwordHMIText.getText());
-       errorReport.setErrordatabaseFilePath(connection.connectToHMI());
+        readConnectingSettings();
+        Thread t1 = new Thread(() -> errorReport.setErrordatabaseFilePath(connection.connectToHMI()));
+        t1.start();
+        while (t1.isAlive()) {
+            showConnectingScreen();
+        }
     }
 
-    private String constructHMIIP(){
+    //Чтение настроек подключения к панели
+    private void readConnectingSettings(){
+        connection = new HMI();
+        connection.setIp(constructHMIIP());
+        connection.setPassword(passwordHMIText.getText());
+    }
+
+    //Отображение экрана ожидания при подключении к панели
+    private void showConnectingScreen(){
+        JOptionPane op = new JOptionPane("Выполняется подключение...", JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
+        dialog = op.createDialog("Панель оператора");
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            public void run() {
+                dialog.setVisible(false);
+                dialog.dispose();
+            }
+        }, 1000);
+        dialog.setVisible(true);
+        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+    }
+
+    //Чтение IP адреса с настроек программы
+    private String constructHMIIP() {
         String ipAdress;
-        String first = firstIPOctetText.getText();
-        String second = secondIPOctetText.getText();
-        String three = thirdIPOctetText.getText();
-        String four = fourthIPOctetText.getText();
-        ipAdress = first+"."+second+"."+three+"."+four;
+        String first = firstIPOctetText.getText().replaceAll("[^0-9.]", "");
+        String second = secondIPOctetText.getText().replaceAll("[^0-9.]", "");
+        String three = thirdIPOctetText.getText().replaceAll("[^0-9.]", "");
+        String four = fourthIPOctetText.getText().replaceAll("[^0-9.]", "");
+        ipAdress = first + "." + second + "." + three + "." + four;
         return ipAdress;
     }
 
 
-
-    private void initComponents() throws ParseException {
+    private void initComponents()  {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         menuBar1 = new JMenuBar();
         menu1 = new JMenu();
@@ -351,9 +380,9 @@ public class ErrorLog extends JFrame {
                         //---- readData ----
                         readData.setText("\u0412\u044b\u0432\u0435\u0441\u0442\u0438 \u043e\u0442\u0447\u0435\u0442 ");
                         readData.addActionListener(e -> {
-			readDataActionPerformed(e);
-			readDataActionPerformed(e);
-		});
+                            readDataActionPerformed(e);
+                            readDataActionPerformed(e);
+                        });
 
                         //---- saveToFile ----
                         saveToFile.setText("\u0421\u043e\u0445\u0440\u0430\u043d\u0438\u0442\u044c \u043e\u0442\u0447\u0435\u0442");
@@ -362,38 +391,38 @@ public class ErrorLog extends JFrame {
                         GroupLayout panel4Layout = new GroupLayout(panel4);
                         panel4.setLayout(panel4Layout);
                         panel4Layout.setHorizontalGroup(
-                            panel4Layout.createParallelGroup()
-                                .add(panel4Layout.createSequentialGroup()
-                                    .add(18, 18, 18)
-                                    .add(panel4Layout.createParallelGroup(GroupLayout.TRAILING)
-                                        .add(label2, GroupLayout.PREFERRED_SIZE, 153, GroupLayout.PREFERRED_SIZE)
-                                        .add(label1))
-                                    .add(51, 51, 51)
-                                    .add(panel4Layout.createParallelGroup()
+                                panel4Layout.createParallelGroup()
                                         .add(panel4Layout.createSequentialGroup()
-                                            .add(readData, GroupLayout.PREFERRED_SIZE, 130, GroupLayout.PREFERRED_SIZE)
-                                            .addPreferredGap(LayoutStyle.UNRELATED)
-                                            .add(saveToFile, GroupLayout.PREFERRED_SIZE, 130, GroupLayout.PREFERRED_SIZE))
-                                        .add(spinnerDateBegin, GroupLayout.PREFERRED_SIZE, 271, GroupLayout.PREFERRED_SIZE)
-                                        .add(spinnerDateEnd, GroupLayout.PREFERRED_SIZE, 271, GroupLayout.PREFERRED_SIZE))
-                                    .addContainerGap(26, Short.MAX_VALUE))
+                                                .add(18, 18, 18)
+                                                .add(panel4Layout.createParallelGroup(GroupLayout.TRAILING)
+                                                        .add(label2, GroupLayout.PREFERRED_SIZE, 153, GroupLayout.PREFERRED_SIZE)
+                                                        .add(label1))
+                                                .add(51, 51, 51)
+                                                .add(panel4Layout.createParallelGroup()
+                                                        .add(panel4Layout.createSequentialGroup()
+                                                                .add(readData, GroupLayout.PREFERRED_SIZE, 130, GroupLayout.PREFERRED_SIZE)
+                                                                .addPreferredGap(LayoutStyle.UNRELATED)
+                                                                .add(saveToFile, GroupLayout.PREFERRED_SIZE, 130, GroupLayout.PREFERRED_SIZE))
+                                                        .add(spinnerDateBegin, GroupLayout.PREFERRED_SIZE, 271, GroupLayout.PREFERRED_SIZE)
+                                                        .add(spinnerDateEnd, GroupLayout.PREFERRED_SIZE, 271, GroupLayout.PREFERRED_SIZE))
+                                                .addContainerGap(26, Short.MAX_VALUE))
                         );
                         panel4Layout.setVerticalGroup(
-                            panel4Layout.createParallelGroup()
-                                .add(panel4Layout.createSequentialGroup()
-                                    .add(14, 14, 14)
-                                    .add(panel4Layout.createParallelGroup()
-                                        .add(label1)
-                                        .add(spinnerDateBegin, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                    .add(18, 18, 18)
-                                    .add(panel4Layout.createParallelGroup(GroupLayout.BASELINE)
-                                        .add(label2)
-                                        .add(spinnerDateEnd, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                    .add(18, 18, 18)
-                                    .add(panel4Layout.createParallelGroup(GroupLayout.BASELINE)
-                                        .add(readData, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .add(saveToFile, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                    .add(15, 15, 15))
+                                panel4Layout.createParallelGroup()
+                                        .add(panel4Layout.createSequentialGroup()
+                                                .add(14, 14, 14)
+                                                .add(panel4Layout.createParallelGroup()
+                                                        .add(label1)
+                                                        .add(spinnerDateBegin, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                                .add(18, 18, 18)
+                                                .add(panel4Layout.createParallelGroup(GroupLayout.BASELINE)
+                                                        .add(label2)
+                                                        .add(spinnerDateEnd, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                                .add(18, 18, 18)
+                                                .add(panel4Layout.createParallelGroup(GroupLayout.BASELINE)
+                                                        .add(readData, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                        .add(saveToFile, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                .add(15, 15, 15))
                         );
                     }
 
@@ -412,18 +441,18 @@ public class ErrorLog extends JFrame {
                         GroupLayout panel6Layout = new GroupLayout(panel6);
                         panel6.setLayout(panel6Layout);
                         panel6Layout.setHorizontalGroup(
-                            panel6Layout.createParallelGroup()
-                                .add(panel6Layout.createSequentialGroup()
-                                    .addContainerGap()
-                                    .add(scrollPane2, GroupLayout.DEFAULT_SIZE, 965, Short.MAX_VALUE)
-                                    .addContainerGap())
+                                panel6Layout.createParallelGroup()
+                                        .add(panel6Layout.createSequentialGroup()
+                                                .addContainerGap()
+                                                .add(scrollPane2, GroupLayout.DEFAULT_SIZE, 965, Short.MAX_VALUE)
+                                                .addContainerGap())
                         );
                         panel6Layout.setVerticalGroup(
-                            panel6Layout.createParallelGroup()
-                                .add(panel6Layout.createSequentialGroup()
-                                    .addContainerGap()
-                                    .add(scrollPane2, GroupLayout.DEFAULT_SIZE, 412, Short.MAX_VALUE)
-                                    .addContainerGap())
+                                panel6Layout.createParallelGroup()
+                                        .add(panel6Layout.createSequentialGroup()
+                                                .addContainerGap()
+                                                .add(scrollPane2, GroupLayout.DEFAULT_SIZE, 412, Short.MAX_VALUE)
+                                                .addContainerGap())
                         );
                     }
 
@@ -436,46 +465,46 @@ public class ErrorLog extends JFrame {
                         GroupLayout panel7Layout = new GroupLayout(panel7);
                         panel7.setLayout(panel7Layout);
                         panel7Layout.setHorizontalGroup(
-                            panel7Layout.createParallelGroup()
-                                .add(panel7Layout.createSequentialGroup()
-                                    .addContainerGap()
-                                    .add(iconLabel)
-                                    .addContainerGap(16, Short.MAX_VALUE))
+                                panel7Layout.createParallelGroup()
+                                        .add(panel7Layout.createSequentialGroup()
+                                                .addContainerGap()
+                                                .add(iconLabel)
+                                                .addContainerGap(16, Short.MAX_VALUE))
                         );
                         panel7Layout.setVerticalGroup(
-                            panel7Layout.createParallelGroup()
-                                .add(panel7Layout.createSequentialGroup()
-                                    .add(21, 21, 21)
-                                    .add(iconLabel)
-                                    .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                panel7Layout.createParallelGroup()
+                                        .add(panel7Layout.createSequentialGroup()
+                                                .add(21, 21, 21)
+                                                .add(iconLabel)
+                                                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         );
                     }
 
                     GroupLayout panel2Layout = new GroupLayout(panel2);
                     panel2.setLayout(panel2Layout);
                     panel2Layout.setHorizontalGroup(
-                        panel2Layout.createParallelGroup()
-                            .add(panel2Layout.createSequentialGroup()
-                                .addContainerGap()
-                                .add(panel2Layout.createParallelGroup()
-                                    .add(panel6, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            panel2Layout.createParallelGroup()
                                     .add(panel2Layout.createSequentialGroup()
-                                        .add(panel7, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                        .add(68, 68, 68)
-                                        .add(panel4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                        .addContainerGap(259, Short.MAX_VALUE))))
+                                            .addContainerGap()
+                                            .add(panel2Layout.createParallelGroup()
+                                                    .add(panel6, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                    .add(panel2Layout.createSequentialGroup()
+                                                            .add(panel7, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                                            .add(68, 68, 68)
+                                                            .add(panel4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                                            .addContainerGap(259, Short.MAX_VALUE))))
                     );
                     panel2Layout.setVerticalGroup(
-                        panel2Layout.createParallelGroup()
-                            .add(panel2Layout.createSequentialGroup()
-                                .add(panel2Layout.createParallelGroup()
-                                    .add(panel7, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                            panel2Layout.createParallelGroup()
                                     .add(panel2Layout.createSequentialGroup()
-                                        .addContainerGap()
-                                        .add(panel4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-                                .addPreferredGap(LayoutStyle.UNRELATED)
-                                .add(panel6, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addContainerGap())
+                                            .add(panel2Layout.createParallelGroup()
+                                                    .add(panel7, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                                    .add(panel2Layout.createSequentialGroup()
+                                                            .addContainerGap()
+                                                            .add(panel4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+                                            .addPreferredGap(LayoutStyle.UNRELATED)
+                                            .add(panel6, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addContainerGap())
                     );
                 }
                 tabbedPane4.addTab("\u041e\u0442\u0447\u0435\u0442", panel2);
@@ -516,58 +545,58 @@ public class ErrorLog extends JFrame {
                         GroupLayout panel9Layout = new GroupLayout(panel9);
                         panel9.setLayout(panel9Layout);
                         panel9Layout.setHorizontalGroup(
-                            panel9Layout.createParallelGroup()
-                                .add(panel9Layout.createSequentialGroup()
-                                    .add(29, 29, 29)
-                                    .add(panel9Layout.createParallelGroup()
-                                        .add(label3)
-                                        .add(label4))
-                                    .add(24, 24, 24)
-                                    .add(panel9Layout.createParallelGroup()
-                                        .add(passwordHMIText, GroupLayout.PREFERRED_SIZE, 214, GroupLayout.PREFERRED_SIZE)
+                                panel9Layout.createParallelGroup()
                                         .add(panel9Layout.createSequentialGroup()
-                                            .add(firstIPOctetText, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                            .addPreferredGap(LayoutStyle.RELATED)
-                                            .add(secondIPOctetText, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                            .addPreferredGap(LayoutStyle.RELATED)
-                                            .add(thirdIPOctetText, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                            .addPreferredGap(LayoutStyle.RELATED)
-                                            .add(fourthIPOctetText, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-                                    .addContainerGap(451, Short.MAX_VALUE))
+                                                .add(29, 29, 29)
+                                                .add(panel9Layout.createParallelGroup()
+                                                        .add(label3)
+                                                        .add(label4))
+                                                .add(24, 24, 24)
+                                                .add(panel9Layout.createParallelGroup()
+                                                        .add(passwordHMIText, GroupLayout.PREFERRED_SIZE, 214, GroupLayout.PREFERRED_SIZE)
+                                                        .add(panel9Layout.createSequentialGroup()
+                                                                .add(firstIPOctetText, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                                                .addPreferredGap(LayoutStyle.RELATED)
+                                                                .add(secondIPOctetText, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                                                .addPreferredGap(LayoutStyle.RELATED)
+                                                                .add(thirdIPOctetText, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                                                .addPreferredGap(LayoutStyle.RELATED)
+                                                                .add(fourthIPOctetText, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+                                                .addContainerGap(451, Short.MAX_VALUE))
                         );
                         panel9Layout.setVerticalGroup(
-                            panel9Layout.createParallelGroup()
-                                .add(panel9Layout.createSequentialGroup()
-                                    .add(27, 27, 27)
-                                    .add(panel9Layout.createParallelGroup(GroupLayout.BASELINE)
-                                        .add(label3)
-                                        .add(firstIPOctetText, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                        .add(secondIPOctetText, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                        .add(thirdIPOctetText, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                        .add(fourthIPOctetText, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                    .add(25, 25, 25)
-                                    .add(panel9Layout.createParallelGroup(GroupLayout.BASELINE)
-                                        .add(passwordHMIText, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                        .add(label4))
-                                    .addContainerGap(28, Short.MAX_VALUE))
+                                panel9Layout.createParallelGroup()
+                                        .add(panel9Layout.createSequentialGroup()
+                                                .add(27, 27, 27)
+                                                .add(panel9Layout.createParallelGroup(GroupLayout.BASELINE)
+                                                        .add(label3)
+                                                        .add(firstIPOctetText, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                                        .add(secondIPOctetText, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                                        .add(thirdIPOctetText, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                                        .add(fourthIPOctetText, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                                .add(25, 25, 25)
+                                                .add(panel9Layout.createParallelGroup(GroupLayout.BASELINE)
+                                                        .add(passwordHMIText, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                                        .add(label4))
+                                                .addContainerGap(28, Short.MAX_VALUE))
                         );
                     }
 
                     GroupLayout panel8Layout = new GroupLayout(panel8);
                     panel8.setLayout(panel8Layout);
                     panel8Layout.setHorizontalGroup(
-                        panel8Layout.createParallelGroup()
-                            .add(panel8Layout.createSequentialGroup()
-                                .addContainerGap(45, Short.MAX_VALUE)
-                                .add(panel9, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(62, Short.MAX_VALUE))
+                            panel8Layout.createParallelGroup()
+                                    .add(panel8Layout.createSequentialGroup()
+                                            .addContainerGap(45, Short.MAX_VALUE)
+                                            .add(panel9, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                            .addContainerGap(62, Short.MAX_VALUE))
                     );
                     panel8Layout.setVerticalGroup(
-                        panel8Layout.createParallelGroup()
-                            .add(panel8Layout.createSequentialGroup()
-                                .addContainerGap(18, Short.MAX_VALUE)
-                                .add(panel9, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(418, Short.MAX_VALUE))
+                            panel8Layout.createParallelGroup()
+                                    .add(panel8Layout.createSequentialGroup()
+                                            .addContainerGap(13, Short.MAX_VALUE)
+                                            .add(panel9, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                            .addContainerGap(423, Short.MAX_VALUE))
                     );
                 }
                 tabbedPane4.addTab("\u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0438", panel8);
@@ -576,26 +605,26 @@ public class ErrorLog extends JFrame {
             GroupLayout panel1Layout = new GroupLayout(panel1);
             panel1.setLayout(panel1Layout);
             panel1Layout.setHorizontalGroup(
-                panel1Layout.createParallelGroup()
-                    .add(tabbedPane4, GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
+                    panel1Layout.createParallelGroup()
+                            .add(tabbedPane4, GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
             );
             panel1Layout.setVerticalGroup(
-                panel1Layout.createParallelGroup()
-                    .add(panel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .add(tabbedPane4, GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE))
+                    panel1Layout.createParallelGroup()
+                            .add(panel1Layout.createSequentialGroup()
+                                    .addContainerGap()
+                                    .add(tabbedPane4, GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE))
             );
         }
 
         GroupLayout contentPaneLayout = new GroupLayout(contentPane);
         contentPane.setLayout(contentPaneLayout);
         contentPaneLayout.setHorizontalGroup(
-            contentPaneLayout.createParallelGroup()
-                .add(panel1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                contentPaneLayout.createParallelGroup()
+                        .add(panel1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         contentPaneLayout.setVerticalGroup(
-            contentPaneLayout.createParallelGroup()
-                .add(panel1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                contentPaneLayout.createParallelGroup()
+                        .add(panel1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         setSize(985, 695);
         setLocationRelativeTo(getOwner());

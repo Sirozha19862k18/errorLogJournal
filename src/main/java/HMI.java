@@ -9,6 +9,15 @@ public class HMI {
     File downloadFile;
     String ip;
     String password;
+    int connectionStatus=0;
+
+    public int getConnectionStatus() {
+        return connectionStatus;
+    }
+
+    public void setConnectionStatus(int connectionStatus) {
+        this.connectionStatus = connectionStatus;
+    }
 
     public String getPassword() {
         return password;
@@ -27,28 +36,33 @@ public class HMI {
     }
 
     public String connectToHMI()  {
+        connectionStatus=0;
         int port = Constants.HMI_PORT;
         String user = Constants.HMI_USER;
         ftpClient = new FTPClient();
         try {
             ftpClient.connect(ip, port);
+            connectionStatus=1;
             ftpClient.login(user, password);
-
-
+            connectionStatus=2;
             copyDBFileFromHMI();
+            connectionStatus=3;
         } catch (IOException e) {
+            connectionStatus=3;
             ErrorLog.showError(e+ "\nНе удалось подключиться к панели опреатора.\n" +
                     "Проверьте сетевые настройки панели \n" +
                     "Адрес панели должен быть " +ip);
             e.printStackTrace();
         }
         finally {
+            connectionStatus=3;
             try {
                 if (ftpClient.isConnected()) {
                     ftpClient.logout();
                     ftpClient.disconnect();
                 }
             } catch (IOException ex) {
+                connectionStatus=3;
                 ErrorLog.showError(ex.toString());
             }
         }
@@ -68,7 +82,7 @@ public class HMI {
                 ErrorLog.showOKMessage("База данных ошибок успешно скопирована с панели опретатора");
             }
             else               {
-                ErrorLog.showOKMessage("Фигня");
+                ErrorLog.showOKMessage("Произошла ошибка копирования");
             }
         } catch (IOException e) {
             ErrorLog.showError(e.toString());
