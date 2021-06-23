@@ -21,13 +21,25 @@ public class ErrorLog extends JFrame {
     private DefaultTableModel tableModel;
     private JDialog dialog;
     private HMI connection;
+    private boolean licenseStatus;
 
     public ErrorLog() throws UnsupportedLookAndFeelException {
         UIManager.setLookAndFeel(new FlatDarkLaf());
         initComponents();
+        if(checkPossibleToRunProgram()){
         prepareUIComponents();
-        errorReport = new ErrorReport();
+        errorReport = new ErrorReport();}
+        else {
+            showAlert("Лицензионный ключ программы не прошел проверку.\n" +
+                    "Возможности программы искуственно ограничены");
+        }
 
+    }
+
+    private boolean checkPossibleToRunProgram(){
+        License license = new License();
+        licenseStatus = license.getLicenseStatus();
+        return licenseStatus;
     }
 
     //Изменение размера ячеек таблицы по ширине содержимого

@@ -33,8 +33,11 @@
             <artifactId>swing-layout</artifactId>
             <version>1.0.2</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.github.oshi</groupId>
+            <artifactId>oshi-core</artifactId>
+            <version>5.7.5</version>
+        </dependency>
 
     </dependencies>
-
 </project>
