@@ -86,12 +86,12 @@ new FormModel {
 						"title": "Отчет"
 					} )
 					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-						"$horizontalGroup": "par l {seq l {space ::45:x, comp panel9:::p::p, space ::62:x}}"
-						"$verticalGroup": "par l {seq l {space ::13:x, comp panel9:::p::p, space ::423:x}}"
+						"$horizontalGroup": "par l {seq {space ::98:x, par l {comp panel9:::p::p, comp panel3:::::x}, space :p:93:p}}"
+						"$verticalGroup": "par l {seq l {space :::x, comp panel9:::p::p, space :p:31:p, comp panel3:::p::p, space ::219:x}}"
 					} ) {
 						name: "panel8"
 						add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-							"$horizontalGroup": "par l {seq l {space :p:29:p, par l {comp label3:::p::p, comp label4:::p::p}, space :p:24:p, par l {comp passwordHMIText:::p:214:p, seq {comp firstIPOctetText:::p::p, space :::p, comp secondIPOctetText:::p::p, space :::p, comp thirdIPOctetText:::p::p, space :::p, comp fourthIPOctetText:::p::p}}, space ::451:x}}"
+							"$horizontalGroup": "par l {seq l {space :p:29:p, par l {comp label3:::p::p, comp label4:::p::p}, space :p:24:p, par l {comp passwordHMIText:::p:214:p, seq {comp firstIPOctetText:::p::p, space :::p, comp secondIPOctetText:::p::p, space :::p, comp thirdIPOctetText:::p::p, space :::p, comp fourthIPOctetText:::p::p}}, space ::367:x}}"
 							"$verticalGroup": "par l {seq l {space :p:27:p, par b {comp label3::b:p::p, comp firstIPOctetText::b:p::p, comp secondIPOctetText::b:p::p, comp thirdIPOctetText::b:p::p, comp fourthIPOctetText::b:p::p}, space :p:25:p, par b {comp passwordHMIText::b:p::p, comp label4::b:p::p}, space ::28:x}}"
 						} ) {
 							name: "panel9"
@@ -128,6 +128,106 @@ new FormModel {
 								name: "fourthIPOctetText"
 								"font": #Font0
 								"text": "3"
+							} )
+						} )
+						add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+							"$horizontalGroup": "par l {seq l {space :p:32:p, par t {comp label5:::p::p, par l:t {comp label18:::p::p, seq {par l:::p {comp label6:::p::p, seq {comp pdfCuntPositionSpinner:::p::p, space :::x, comp label12:::p::p}}, space :p:18:p, par l {comp label7::l:p::p, seq l {comp pdfErrorCodeSpinner:::p::p, space :::p, comp label13:::p::p}}, space :p:33:p, par l {comp label8::l:p::p, seq l {comp pdfErrorDescriptionSpinner:::p::p, space :::p, comp label14:::p::p}}, space :p:30:p, par l {comp label9::l:p::p, seq l {comp pdfErrorBeginDateSpinner:::p::p, space :::p, comp label15:::p::p}}, space :p:36:p, par l {seq {comp pdfErrorEndDateSpinner:::p::p, space :::p, comp label16:::p::p}, comp label10:::p::p}}}}, space :p:21:p, par l {seq {comp pdfOperatorSpinner:::p::p, space u:::p, comp label17:::p::p}, comp label11:::p::p}, space :98::x}}"
+							"$verticalGroup": "par l {seq l {space :::p, comp label5:::p::p, space :p:30:p, par b {comp label6::b:p::p, comp label7::b:p::p, comp label8::b:p::p, comp label9::b:p::p, comp label10::b:p::p, comp label11::b:p::p}, space :::p, par b {comp pdfCuntPositionSpinner::b:p::p, comp pdfErrorCodeSpinner::b:p::p, comp pdfErrorDescriptionSpinner::b:p::p, comp pdfErrorBeginDateSpinner::b:p::p, comp pdfErrorEndDateSpinner::b:p::p, comp label12::b:p::p, comp label13::b:p::p, comp label14::b:p::p, comp label15::b:p::p, comp label16::b:p::p, comp label17::b:p::p, comp pdfOperatorSpinner::b:p::p}, space u:::p, comp label18:::p::p, space ::15:x}}"
+						} ) {
+							name: "panel3"
+							"border": new javax.swing.border.TitledBorder( "Настройки файла отчета" )
+							add( new FormComponent( "javax.swing.JSpinner" ) {
+								name: "pdfCuntPositionSpinner"
+								"font": &Font1 new java.awt.Font( "Segoe UI", 0, 16 )
+								"model": new javax.swing.SpinnerNumberModel( 11.0f, 0.0f, 100.0f, 1.0f )
+							} )
+							add( new FormComponent( "javax.swing.JSpinner" ) {
+								name: "pdfErrorCodeSpinner"
+								"font": #Font1
+								"model": new javax.swing.SpinnerNumberModel( 8.0f, 0.0f, 100.0f, 1.0f )
+							} )
+							add( new FormComponent( "javax.swing.JSpinner" ) {
+								name: "pdfErrorDescriptionSpinner"
+								"font": #Font1
+								"model": new javax.swing.SpinnerNumberModel( 42.0f, 0.0f, 100.0f, 1.0f )
+							} )
+							add( new FormComponent( "javax.swing.JSpinner" ) {
+								name: "pdfErrorBeginDateSpinner"
+								"font": #Font1
+								"model": new javax.swing.SpinnerNumberModel( 12.0f, 0.0f, 100.0f, 1.0f )
+							} )
+							add( new FormComponent( "javax.swing.JSpinner" ) {
+								name: "pdfErrorEndDateSpinner"
+								"font": #Font1
+								"model": new javax.swing.SpinnerNumberModel( 12.0f, 0.0f, 100.0f, 1.0f )
+							} )
+							add( new FormComponent( "javax.swing.JSpinner" ) {
+								name: "pdfOperatorSpinner"
+								"font": #Font1
+								"model": new javax.swing.SpinnerNumberModel( 15.0f, 0.0f, 100.0f, 1.0f )
+							} )
+							add( new FormComponent( "javax.swing.JLabel" ) {
+								name: "label5"
+								"text": "Настройка ширины каждой колонки в таблице файла отчета "
+								"font": new com.jformdesigner.model.SwingDerivedFont( null, 0, 16, true )
+							} )
+							add( new FormComponent( "javax.swing.JLabel" ) {
+								name: "label6"
+								"text": "Номер позиции"
+							} )
+							add( new FormComponent( "javax.swing.JLabel" ) {
+								name: "label7"
+								"text": "Код ошибки"
+							} )
+							add( new FormComponent( "javax.swing.JLabel" ) {
+								name: "label8"
+								"text": "Описание"
+							} )
+							add( new FormComponent( "javax.swing.JLabel" ) {
+								name: "label9"
+								"text": "Дата начала"
+							} )
+							add( new FormComponent( "javax.swing.JLabel" ) {
+								name: "label10"
+								"text": "Дата конца"
+							} )
+							add( new FormComponent( "javax.swing.JLabel" ) {
+								name: "label11"
+								"text": "Оператор"
+							} )
+							add( new FormComponent( "javax.swing.JLabel" ) {
+								name: "label12"
+								"text": "%"
+								"font": &SwingDerivedFont0 new com.jformdesigner.model.SwingDerivedFont( null, 0, 16, true )
+							} )
+							add( new FormComponent( "javax.swing.JLabel" ) {
+								name: "label13"
+								"text": "%"
+								"font": #SwingDerivedFont0
+							} )
+							add( new FormComponent( "javax.swing.JLabel" ) {
+								name: "label14"
+								"text": "%"
+								"font": #SwingDerivedFont0
+							} )
+							add( new FormComponent( "javax.swing.JLabel" ) {
+								name: "label15"
+								"text": "%"
+								"font": #SwingDerivedFont0
+							} )
+							add( new FormComponent( "javax.swing.JLabel" ) {
+								name: "label16"
+								"text": "%"
+								"font": #SwingDerivedFont0
+							} )
+							add( new FormComponent( "javax.swing.JLabel" ) {
+								name: "label17"
+								"text": "%"
+								"font": #SwingDerivedFont0
+							} )
+							add( new FormComponent( "javax.swing.JLabel" ) {
+								name: "label18"
+								"text": "* Общая сумма размеров  колонок должна составлять 100%"
 							} )
 						} )
 					}, new FormLayoutConstraints( null ) {

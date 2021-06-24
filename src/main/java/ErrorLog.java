@@ -200,31 +200,38 @@ public class ErrorLog extends JFrame {
     }
 
     private void saveToFileActionPerformed(ActionEvent e) {
-        PDFGenerator pdfGenerator = new PDFGenerator();
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setSelectedFile(new File(setVariantFileNameForReport()));
-        fileChooser.setFileFilter(new FileNameExtensionFilter("PDF Documents", "pdf"));
-        fileChooser.setDialogTitle("Сохранить файл отчета");
-        int userSelection = fileChooser.showSaveDialog(new JFrame());
-        if (userSelection == JFileChooser.APPROVE_OPTION) {
-            File fileToSave = fileChooser.getSelectedFile();
-            if (fileToSave == null) {
-                return;
+        float[] sizePDFTable = sizePDFTableInReport();
+        if (checkSummarySizePDFTableInReport(sizePDFTable)) {
+            PDFGenerator pdfGenerator = new PDFGenerator();
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setSelectedFile(new File(setVariantFileNameForReport()));
+            fileChooser.setFileFilter(new FileNameExtensionFilter("PDF Documents", "pdf"));
+            fileChooser.setDialogTitle("Сохранить файл отчета");
+            int userSelection = fileChooser.showSaveDialog(new JFrame());
+            if (userSelection == JFileChooser.APPROVE_OPTION) {
+                File fileToSave = fileChooser.getSelectedFile();
+                if (fileToSave == null) {
+                    return;
+                }
+                if (!fileToSave.getName().toLowerCase().endsWith(".pdf")) {
+                    fileToSave = new File(fileToSave.getParentFile(), fileToSave.getName() + ".pdf");
+                    pdfGenerator.saveAsPDF(fileToSave, errorTable, errorReport, sizePDFTable);
+                    JOptionPane.showMessageDialog(new JFrame(),
+                            "Файл '" + fileChooser.getSelectedFile() +
+                                    "  сохранен");
+                } else {
+                    JOptionPane.showMessageDialog(new JFrame(),
+                            "Файл  '" + fileChooser.getSelectedFile() +
+                                    "  не был сохранен \n" +
+                                    "Вероятно, файл с таким именем уже существует",
+                            "Ошибка",
+                            JOptionPane.ERROR_MESSAGE);
+                }
             }
-            if (!fileToSave.getName().toLowerCase().endsWith(".pdf")) {
-                fileToSave = new File(fileToSave.getParentFile(), fileToSave.getName() + ".pdf");
-                pdfGenerator.saveAsPDF(fileToSave, errorTable, errorReport);
-                JOptionPane.showMessageDialog(new JFrame(),
-                        "Файл '" + fileChooser.getSelectedFile() +
-                                "  сохранен");
-            } else {
-                JOptionPane.showMessageDialog(new JFrame(),
-                        "Файл  '" + fileChooser.getSelectedFile() +
-                                "  не был сохранен \n" +
-                                "Вероятно, файл с таким именем уже существует",
-                        "Ошибка",
-                        JOptionPane.ERROR_MESSAGE);
-            }
+        }
+        else{
+            showAlert("Размеры колонок файла отчета, указанных в настройках программы\n" +
+                    "в сумме должны составлять 100%");
         }
     }
 
@@ -245,6 +252,29 @@ public class ErrorLog extends JFrame {
         while (t1.isAlive()) {
             showConnectingScreen();
         }
+    }
+
+    private boolean checkSummarySizePDFTableInReport(float[] pdfTableSize){
+        boolean checked=false;
+        float result=0;
+        for (float v : pdfTableSize) {
+            result = result + v;
+        }
+        if (result==100f){
+            checked=true;
+        }
+        return checked;
+    }
+
+    private float[] sizePDFTableInReport(){
+        float size[] = new float[6];
+        size[0]= Float.parseFloat(pdfCuntPositionSpinner.getValue().toString());
+        size[1]= Float.parseFloat(pdfErrorCodeSpinner.getValue().toString());
+        size[2]= Float.parseFloat(pdfErrorDescriptionSpinner.getValue().toString());
+        size[3]= Float.parseFloat(pdfErrorBeginDateSpinner.getValue().toString());
+        size[4]= Float.parseFloat(pdfErrorEndDateSpinner.getValue().toString());
+        size[5]= Float.parseFloat(pdfOperatorSpinner.getValue().toString());
+        return size;
     }
 
     //Чтение настроек подключения к панели
@@ -316,6 +346,27 @@ public class ErrorLog extends JFrame {
         secondIPOctetText = new JFormattedTextField();
         thirdIPOctetText = new JFormattedTextField();
         fourthIPOctetText = new JFormattedTextField();
+        panel3 = new JPanel();
+        pdfCuntPositionSpinner = new JSpinner();
+        pdfErrorCodeSpinner = new JSpinner();
+        pdfErrorDescriptionSpinner = new JSpinner();
+        pdfErrorBeginDateSpinner = new JSpinner();
+        pdfErrorEndDateSpinner = new JSpinner();
+        pdfOperatorSpinner = new JSpinner();
+        label5 = new JLabel();
+        label6 = new JLabel();
+        label7 = new JLabel();
+        label8 = new JLabel();
+        label9 = new JLabel();
+        label10 = new JLabel();
+        label11 = new JLabel();
+        label12 = new JLabel();
+        label13 = new JLabel();
+        label14 = new JLabel();
+        label15 = new JLabel();
+        label16 = new JLabel();
+        label17 = new JLabel();
+        label18 = new JLabel();
 
         //======== this ========
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -581,7 +632,7 @@ public class ErrorLog extends JFrame {
                                             .add(thirdIPOctetText, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                             .addPreferredGap(LayoutStyle.RELATED)
                                             .add(fourthIPOctetText, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-                                    .addContainerGap(451, Short.MAX_VALUE))
+                                    .addContainerGap(367, Short.MAX_VALUE))
                         );
                         panel9Layout.setVerticalGroup(
                             panel9Layout.createParallelGroup()
@@ -601,21 +652,189 @@ public class ErrorLog extends JFrame {
                         );
                     }
 
+                    //======== panel3 ========
+                    {
+                        panel3.setBorder(new TitledBorder("\u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0438 \u0444\u0430\u0439\u043b\u0430 \u043e\u0442\u0447\u0435\u0442\u0430"));
+
+                        //---- pdfCuntPositionSpinner ----
+                        pdfCuntPositionSpinner.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+                        pdfCuntPositionSpinner.setModel(new SpinnerNumberModel(11.0F, 0.0F, 100.0F, 1.0F));
+
+                        //---- pdfErrorCodeSpinner ----
+                        pdfErrorCodeSpinner.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+                        pdfErrorCodeSpinner.setModel(new SpinnerNumberModel(8.0F, 0.0F, 100.0F, 1.0F));
+
+                        //---- pdfErrorDescriptionSpinner ----
+                        pdfErrorDescriptionSpinner.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+                        pdfErrorDescriptionSpinner.setModel(new SpinnerNumberModel(42.0F, 0.0F, 100.0F, 1.0F));
+
+                        //---- pdfErrorBeginDateSpinner ----
+                        pdfErrorBeginDateSpinner.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+                        pdfErrorBeginDateSpinner.setModel(new SpinnerNumberModel(12.0F, 0.0F, 100.0F, 1.0F));
+
+                        //---- pdfErrorEndDateSpinner ----
+                        pdfErrorEndDateSpinner.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+                        pdfErrorEndDateSpinner.setModel(new SpinnerNumberModel(12.0F, 0.0F, 100.0F, 1.0F));
+
+                        //---- pdfOperatorSpinner ----
+                        pdfOperatorSpinner.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+                        pdfOperatorSpinner.setModel(new SpinnerNumberModel(15.0F, 0.0F, 100.0F, 1.0F));
+
+                        //---- label5 ----
+                        label5.setText("\u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0430 \u0448\u0438\u0440\u0438\u043d\u044b \u043a\u0430\u0436\u0434\u043e\u0439 \u043a\u043e\u043b\u043e\u043d\u043a\u0438 \u0432 \u0442\u0430\u0431\u043b\u0438\u0446\u0435 \u0444\u0430\u0439\u043b\u0430 \u043e\u0442\u0447\u0435\u0442\u0430 ");
+                        label5.setFont(label5.getFont().deriveFont(16f));
+
+                        //---- label6 ----
+                        label6.setText("\u041d\u043e\u043c\u0435\u0440 \u043f\u043e\u0437\u0438\u0446\u0438\u0438");
+
+                        //---- label7 ----
+                        label7.setText("\u041a\u043e\u0434 \u043e\u0448\u0438\u0431\u043a\u0438");
+
+                        //---- label8 ----
+                        label8.setText("\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435");
+
+                        //---- label9 ----
+                        label9.setText("\u0414\u0430\u0442\u0430 \u043d\u0430\u0447\u0430\u043b\u0430");
+
+                        //---- label10 ----
+                        label10.setText("\u0414\u0430\u0442\u0430 \u043a\u043e\u043d\u0446\u0430");
+
+                        //---- label11 ----
+                        label11.setText("\u041e\u043f\u0435\u0440\u0430\u0442\u043e\u0440");
+
+                        //---- label12 ----
+                        label12.setText("%");
+                        label12.setFont(label12.getFont().deriveFont(16f));
+
+                        //---- label13 ----
+                        label13.setText("%");
+                        label13.setFont(label13.getFont().deriveFont(16f));
+
+                        //---- label14 ----
+                        label14.setText("%");
+                        label14.setFont(label14.getFont().deriveFont(16f));
+
+                        //---- label15 ----
+                        label15.setText("%");
+                        label15.setFont(label15.getFont().deriveFont(16f));
+
+                        //---- label16 ----
+                        label16.setText("%");
+                        label16.setFont(label16.getFont().deriveFont(16f));
+
+                        //---- label17 ----
+                        label17.setText("%");
+                        label17.setFont(label17.getFont().deriveFont(16f));
+
+                        //---- label18 ----
+                        label18.setText("* \u041e\u0431\u0449\u0430\u044f \u0441\u0443\u043c\u043c\u0430 \u0440\u0430\u0437\u043c\u0435\u0440\u043e\u0432  \u043a\u043e\u043b\u043e\u043d\u043e\u043a \u0434\u043e\u043b\u0436\u043d\u0430 \u0441\u043e\u0441\u0442\u0430\u0432\u043b\u044f\u0442\u044c 100%");
+
+                        GroupLayout panel3Layout = new GroupLayout(panel3);
+                        panel3.setLayout(panel3Layout);
+                        panel3Layout.setHorizontalGroup(
+                            panel3Layout.createParallelGroup()
+                                .add(panel3Layout.createSequentialGroup()
+                                    .add(32, 32, 32)
+                                    .add(panel3Layout.createParallelGroup(GroupLayout.TRAILING)
+                                        .add(label5)
+                                        .add(panel3Layout.createParallelGroup()
+                                            .add(label18)
+                                            .add(panel3Layout.createSequentialGroup()
+                                                .add(panel3Layout.createParallelGroup(GroupLayout.LEADING, false)
+                                                    .add(label6)
+                                                    .add(panel3Layout.createSequentialGroup()
+                                                        .add(pdfCuntPositionSpinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                                        .addPreferredGap(LayoutStyle.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                        .add(label12)))
+                                                .add(18, 18, 18)
+                                                .add(panel3Layout.createParallelGroup()
+                                                    .add(label7)
+                                                    .add(panel3Layout.createSequentialGroup()
+                                                        .add(pdfErrorCodeSpinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                                        .addPreferredGap(LayoutStyle.RELATED)
+                                                        .add(label13)))
+                                                .add(33, 33, 33)
+                                                .add(panel3Layout.createParallelGroup()
+                                                    .add(label8)
+                                                    .add(panel3Layout.createSequentialGroup()
+                                                        .add(pdfErrorDescriptionSpinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                                        .addPreferredGap(LayoutStyle.RELATED)
+                                                        .add(label14)))
+                                                .add(30, 30, 30)
+                                                .add(panel3Layout.createParallelGroup()
+                                                    .add(label9)
+                                                    .add(panel3Layout.createSequentialGroup()
+                                                        .add(pdfErrorBeginDateSpinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                                        .addPreferredGap(LayoutStyle.RELATED)
+                                                        .add(label15)))
+                                                .add(36, 36, 36)
+                                                .add(panel3Layout.createParallelGroup()
+                                                    .add(panel3Layout.createSequentialGroup()
+                                                        .add(pdfErrorEndDateSpinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                                        .addPreferredGap(LayoutStyle.RELATED)
+                                                        .add(label16))
+                                                    .add(label10)))))
+                                    .add(21, 21, 21)
+                                    .add(panel3Layout.createParallelGroup()
+                                        .add(panel3Layout.createSequentialGroup()
+                                            .add(pdfOperatorSpinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(LayoutStyle.UNRELATED)
+                                            .add(label17))
+                                        .add(label11))
+                                    .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        );
+                        panel3Layout.setVerticalGroup(
+                            panel3Layout.createParallelGroup()
+                                .add(panel3Layout.createSequentialGroup()
+                                    .addContainerGap()
+                                    .add(label5)
+                                    .add(30, 30, 30)
+                                    .add(panel3Layout.createParallelGroup(GroupLayout.BASELINE)
+                                        .add(label6)
+                                        .add(label7)
+                                        .add(label8)
+                                        .add(label9)
+                                        .add(label10)
+                                        .add(label11))
+                                    .addPreferredGap(LayoutStyle.RELATED)
+                                    .add(panel3Layout.createParallelGroup(GroupLayout.BASELINE)
+                                        .add(pdfCuntPositionSpinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                        .add(pdfErrorCodeSpinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                        .add(pdfErrorDescriptionSpinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                        .add(pdfErrorBeginDateSpinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                        .add(pdfErrorEndDateSpinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                        .add(label12)
+                                        .add(label13)
+                                        .add(label14)
+                                        .add(label15)
+                                        .add(label16)
+                                        .add(label17)
+                                        .add(pdfOperatorSpinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                    .addPreferredGap(LayoutStyle.UNRELATED)
+                                    .add(label18)
+                                    .addContainerGap(15, Short.MAX_VALUE))
+                        );
+                    }
+
                     GroupLayout panel8Layout = new GroupLayout(panel8);
                     panel8.setLayout(panel8Layout);
                     panel8Layout.setHorizontalGroup(
                         panel8Layout.createParallelGroup()
                             .add(panel8Layout.createSequentialGroup()
-                                .addContainerGap(45, Short.MAX_VALUE)
-                                .add(panel9, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(62, Short.MAX_VALUE))
+                                .addContainerGap(98, Short.MAX_VALUE)
+                                .add(panel8Layout.createParallelGroup()
+                                    .add(panel9, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                    .add(panel3, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .add(93, 93, 93))
                     );
                     panel8Layout.setVerticalGroup(
                         panel8Layout.createParallelGroup()
                             .add(panel8Layout.createSequentialGroup()
-                                .addContainerGap(13, Short.MAX_VALUE)
+                                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .add(panel9, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(423, Short.MAX_VALUE))
+                                .add(31, 31, 31)
+                                .add(panel3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(219, Short.MAX_VALUE))
                     );
                 }
                 tabbedPane4.addTab("\u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0438", panel8);
@@ -684,5 +903,26 @@ public class ErrorLog extends JFrame {
     private JFormattedTextField secondIPOctetText;
     private JFormattedTextField thirdIPOctetText;
     private JFormattedTextField fourthIPOctetText;
+    private JPanel panel3;
+    private JSpinner pdfCuntPositionSpinner;
+    private JSpinner pdfErrorCodeSpinner;
+    private JSpinner pdfErrorDescriptionSpinner;
+    private JSpinner pdfErrorBeginDateSpinner;
+    private JSpinner pdfErrorEndDateSpinner;
+    private JSpinner pdfOperatorSpinner;
+    private JLabel label5;
+    private JLabel label6;
+    private JLabel label7;
+    private JLabel label8;
+    private JLabel label9;
+    private JLabel label10;
+    private JLabel label11;
+    private JLabel label12;
+    private JLabel label13;
+    private JLabel label14;
+    private JLabel label15;
+    private JLabel label16;
+    private JLabel label17;
+    private JLabel label18;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }

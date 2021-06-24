@@ -18,9 +18,11 @@ public class PDFGenerator {
     private File file;
     private JTable errorTable;
     private ErrorReport errorReport;
+    private float[] sizePDFTable;
 
-    public void saveAsPDF(File file, JTable errorTable, ErrorReport errorReport) {
+    public void saveAsPDF(File file, JTable errorTable, ErrorReport errorReport, float[] sizePDFTable) {
         this.errorReport = errorReport;
+        this.sizePDFTable = sizePDFTable;
         this.file = file;
         this.errorTable = errorTable;
         if (!file.isFile()) {
@@ -54,7 +56,7 @@ public class PDFGenerator {
     }
 
     private void generateErrorTable() {
-        PdfPTable table = new PdfPTable(new float[]{11f, 8f, 42f, 12f, 12f, 15f});
+        PdfPTable table = new PdfPTable(sizePDFTable);
         table.setWidthPercentage(100f);
         for (int rowCounter = 0; rowCounter < errorTable.getRowCount(); rowCounter++) {
             for (int columnCouner = 0; columnCouner < errorTable.getColumnCount(); columnCouner++) {
