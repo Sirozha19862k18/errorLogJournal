@@ -9,6 +9,15 @@ public class ErrorReport {
     public ArrayList<String[]> reportBody;
     public String errorReportHumanViewDate;
     public String errordatabaseFilePath;
+    public String errorReportFileNameVariant;
+
+    public String getErrorReportFileNameVariant() {
+        return errorReportFileNameVariant;
+    }
+
+    public void setErrorReportFileNameVariant() {
+        this.errorReportFileNameVariant = timeHumanViewConverter(getReportDateBegin(), Constants.HUMAN_DATE_FORMAT_FOR_FILE_NAME)+" - "+ timeHumanViewConverter(getReportDateEnd(), Constants.HUMAN_DATE_FORMAT_FOR_FILE_NAME);
+    }
 
     public String getErrordatabaseFilePath() {
         return errordatabaseFilePath;
@@ -23,7 +32,7 @@ public class ErrorReport {
     }
 
     public void setErrorReportHumanViewDate() {
-     errorReportHumanViewDate = timeHumanViewConverter(getReportDateBegin())+" - "+ timeHumanViewConverter(getReportDateEnd());
+     errorReportHumanViewDate = timeHumanViewConverter(getReportDateBegin(), Constants.HUMAN_DATE_FORMAT)+" - "+ timeHumanViewConverter(getReportDateEnd(), Constants.HUMAN_DATE_FORMAT);
     }
 
     public long getReportDateBegin() {
@@ -41,6 +50,7 @@ public class ErrorReport {
     public void setReportDateEnd(long unixtime) {
         this.reportDateEnd = unixtime;
         setErrorReportHumanViewDate();
+        setErrorReportFileNameVariant();
     }
 
     public ArrayList<String[]> getReportBody() {
@@ -58,9 +68,9 @@ public class ErrorReport {
 
 
     //Конвертер с UnixTime в строку
-    private String timeHumanViewConverter(long time){
+    private String timeHumanViewConverter(long time, String DateFormat){
         Date date = new java.util.Date(time*1000L);
-        SimpleDateFormat sdf = new java.text.SimpleDateFormat(Constants.HUMAN_DATE_FORMAT);
+        SimpleDateFormat sdf = new java.text.SimpleDateFormat(DateFormat);
         return sdf.format(date);
     }
 

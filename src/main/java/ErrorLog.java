@@ -192,9 +192,17 @@ public class ErrorLog extends JFrame {
         }
     }
 
+    private String setVariantFileNameForReport(){
+        String filename;
+        filename = "Отчет за период "+errorReport.getErrorReportFileNameVariant();
+        System.out.println(filename);
+        return filename;
+    }
+
     private void saveToFileActionPerformed(ActionEvent e) {
         PDFGenerator pdfGenerator = new PDFGenerator();
         JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setSelectedFile(new File(setVariantFileNameForReport()));
         fileChooser.setFileFilter(new FileNameExtensionFilter("PDF Documents", "pdf"));
         fileChooser.setDialogTitle("Сохранить файл отчета");
         int userSelection = fileChooser.showSaveDialog(new JFrame());
