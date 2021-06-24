@@ -192,10 +192,10 @@ public class ErrorLog extends JFrame {
         }
     }
 
+    //Генерирование имени файла отчета за выбранный период
     private String setVariantFileNameForReport(){
         String filename;
         filename = "Отчет за период "+errorReport.getErrorReportFileNameVariant();
-        System.out.println(filename);
         return filename;
     }
 
