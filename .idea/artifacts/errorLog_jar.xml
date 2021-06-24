@@ -13,6 +13,22 @@
       <element id="library" level="project" name="Maven: commons-net:commons-net:3.8.0" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/commons-net-3.8.0.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/commons-net-3.8.0-ftp.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/oshi-core-5.7.5.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/jna-platform-5.8.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/jna-5.8.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/slf4j-log4j12-1.7.31.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/slf4j-api-1.7.31.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/slf4j-simple-1.7.31.jar" path-in-jar="/" />
+      <element id="library" level="project" name="Maven: org.slf4j:slf4j-simple:1.7.31" />
+      <element id="library" level="project" name="org.xerial:sqlite-jdbc:3.34.0" />
+      <element id="library" level="project" name="Maven: org.slf4j:slf4j-api:1.7.31" />
+      <element id="library" level="project" name="Maven: net.java.dev.swing-layout:swing-layout:1.0.2" />
+      <element id="library" level="project" name="Maven: net.java.dev.jna:jna:5.8.0" />
+      <element id="library" level="project" name="Maven: net.java.dev.jna:jna-platform:5.8.0" />
+      <element id="library" level="project" name="Maven: com.itextpdf:itextpdf:5.5.13.2" />
+      <element id="library" level="project" name="Maven: com.github.oshi:oshi-core:5.7.5" />
+      <element id="library" level="project" name="Maven: com.formdev:flatlaf:1.2" />
+      <element id="library" level="project" name="GroupLayout" />
     </root>
   </artifact>
 </component>

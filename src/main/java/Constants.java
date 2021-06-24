@@ -9,7 +9,7 @@ public class Constants {
     final static int HMI_PORT = 21;
     final static String HMI_USER = "uploadhis";
     final static String PATH_TO_DB_IN_HMI = "eventlog/event.db";
-    final static String TEMPORARY_DB_FILE_ON_PC = "~tempfile.tmp";
+    final static String TEMPORARY_DB_FILE_ON_PC = "TEMP/tempfile.tmp";
     final static String SERIAL_NUMBER_MOTHERBOARD = "PF20ZN0R";   // Изменить для запуска на новом компьютере
 
 }
