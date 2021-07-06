@@ -24,7 +24,7 @@ public class SQLQuery {
         ArrayList<String[]> errorResult = new ArrayList<>();
 
 
-        String sql = "SELECT ROW_NUMBER() OVER () AS 'Счетчик', event.event_log_index as 'Код ошибки', event_log.language1 as 'Описание', datetime(event.'trigger_time@timestamp', 'unixepoch', 'localtime')  as 'Время появления ошибки' , datetime(event.'recover_time@timestamp', 'unixepoch', 'localtime')   as 'Время окончания ошибки', \n" +
+        String sql = "SELECT ROW_NUMBER() OVER () AS 'Счетчик',event_log.category as 'Категория', event.event_log_index as 'Код ошибки', event_log.language1 as 'Описание', datetime(event.'trigger_time@timestamp', 'unixepoch', 'localtime')  as 'Время появления ошибки' , datetime(event.'recover_time@timestamp', 'unixepoch', 'localtime')   as 'Время окончания ошибки', \n" +
                 "event.WATCH1 as 'Оператор'\n" +
                 "FROM event \n" +
                 "INNER JOIN event_log ON event.event_log_index=event_log.event_log_index\n" +
@@ -38,7 +38,7 @@ public class SQLQuery {
              ResultSet result = stmnt.executeQuery(sql)) {
             while (result.next()) {
                 String[] row = new String[]{result.getString(1), result.getString(2), result.getString(3), result.getString(4),
-                        result.getString(5), result.getString(6)};
+                        result.getString(5), result.getString(6), result.getString(7)};
                 errorResult.add(row);
             }
         } catch (SQLException throwables) {

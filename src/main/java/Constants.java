@@ -1,7 +1,7 @@
 
 public class Constants {
 
-    final static String[] TABLEHEADER = new String[] {"№","Код", "Описание ошибки", "Дата и время начала" ,"Дата и время конца", "Оператор"};
+    final static String[] TABLEHEADER = new String[] {"№","Категория","Код", "Описание ошибки", "Дата и время начала" ,"Дата и время конца", "Оператор"};
     final static String DATA_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS Z";
     final static String HUMAN_DATE_FORMAT = "dd.MM.yyyy HH:mm";
     final static String HUMAN_DATE_FORMAT_FOR_FILE_NAME = "yyyy-MM-dd HH-mm";

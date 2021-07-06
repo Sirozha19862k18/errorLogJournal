@@ -72,7 +72,7 @@ public class ErrorLog extends JFrame {
 
    //Модель отображения таблицы ошибок
     public void initTableModel() {
-        tableModel = new DefaultTableModel(0, 6);
+        tableModel = new DefaultTableModel(0, 7);
         tableModel.addRow(Constants.TABLEHEADER);
         errorTable.setModel(tableModel);
     }
@@ -267,13 +267,14 @@ public class ErrorLog extends JFrame {
     }
 
     private float[] sizePDFTableInReport(){
-        float size[] = new float[6];
+        float size[] = new float[7];
         size[0]= Float.parseFloat(pdfCuntPositionSpinner.getValue().toString());
-        size[1]= Float.parseFloat(pdfErrorCodeSpinner.getValue().toString());
-        size[2]= Float.parseFloat(pdfErrorDescriptionSpinner.getValue().toString());
-        size[3]= Float.parseFloat(pdfErrorBeginDateSpinner.getValue().toString());
-        size[4]= Float.parseFloat(pdfErrorEndDateSpinner.getValue().toString());
-        size[5]= Float.parseFloat(pdfOperatorSpinner.getValue().toString());
+        size[1]= Float.parseFloat(pdfCategoryPositionSpinner.getValue().toString());
+        size[2]= Float.parseFloat(pdfErrorCodeSpinner.getValue().toString());
+        size[3]= Float.parseFloat(pdfErrorDescriptionSpinner.getValue().toString());
+        size[4]= Float.parseFloat(pdfErrorBeginDateSpinner.getValue().toString());
+        size[5]= Float.parseFloat(pdfErrorEndDateSpinner.getValue().toString());
+        size[6]= Float.parseFloat(pdfOperatorSpinner.getValue().toString());
         return size;
     }
 
@@ -367,6 +368,9 @@ public class ErrorLog extends JFrame {
         label16 = new JLabel();
         label17 = new JLabel();
         label18 = new JLabel();
+        pdfCategoryPositionSpinner = new JSpinner();
+        label19 = new JLabel();
+        label20 = new JLabel();
 
         //======== this ========
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -632,7 +636,7 @@ public class ErrorLog extends JFrame {
                                             .add(thirdIPOctetText, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                             .addPreferredGap(LayoutStyle.RELATED)
                                             .add(fourthIPOctetText, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-                                    .addContainerGap(367, Short.MAX_VALUE))
+                                    .addContainerGap(468, Short.MAX_VALUE))
                         );
                         panel9Layout.setVerticalGroup(
                             panel9Layout.createParallelGroup()
@@ -666,7 +670,7 @@ public class ErrorLog extends JFrame {
 
                         //---- pdfErrorDescriptionSpinner ----
                         pdfErrorDescriptionSpinner.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-                        pdfErrorDescriptionSpinner.setModel(new SpinnerNumberModel(42.0F, 0.0F, 100.0F, 1.0F));
+                        pdfErrorDescriptionSpinner.setModel(new SpinnerNumberModel(34.0F, 0.0F, 100.0F, 1.0F));
 
                         //---- pdfErrorBeginDateSpinner ----
                         pdfErrorBeginDateSpinner.setFont(new Font("Segoe UI", Font.PLAIN, 16));
@@ -729,59 +733,88 @@ public class ErrorLog extends JFrame {
                         //---- label18 ----
                         label18.setText("* \u041e\u0431\u0449\u0430\u044f \u0441\u0443\u043c\u043c\u0430 \u0440\u0430\u0437\u043c\u0435\u0440\u043e\u0432  \u043a\u043e\u043b\u043e\u043d\u043e\u043a \u0434\u043e\u043b\u0436\u043d\u0430 \u0441\u043e\u0441\u0442\u0430\u0432\u043b\u044f\u0442\u044c 100%");
 
+                        //---- pdfCategoryPositionSpinner ----
+                        pdfCategoryPositionSpinner.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+                        pdfCategoryPositionSpinner.setModel(new SpinnerNumberModel(8.0F, 0.0F, 100.0F, 1.0F));
+
+                        //---- label19 ----
+                        label19.setText("%");
+                        label19.setFont(label19.getFont().deriveFont(16f));
+
+                        //---- label20 ----
+                        label20.setText("\u041a\u0430\u0442\u0435\u0433\u043e\u0440\u0438\u044f \u043e\u0448\u0438\u0431\u043a\u0438");
+
                         GroupLayout panel3Layout = new GroupLayout(panel3);
                         panel3.setLayout(panel3Layout);
                         panel3Layout.setHorizontalGroup(
                             panel3Layout.createParallelGroup()
                                 .add(panel3Layout.createSequentialGroup()
-                                    .add(32, 32, 32)
-                                    .add(panel3Layout.createParallelGroup(GroupLayout.TRAILING)
-                                        .add(label5)
-                                        .add(panel3Layout.createParallelGroup()
-                                            .add(label18)
-                                            .add(panel3Layout.createSequentialGroup()
-                                                .add(panel3Layout.createParallelGroup(GroupLayout.LEADING, false)
-                                                    .add(label6)
-                                                    .add(panel3Layout.createSequentialGroup()
-                                                        .add(pdfCuntPositionSpinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                                        .addPreferredGap(LayoutStyle.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                        .add(label12)))
-                                                .add(18, 18, 18)
-                                                .add(panel3Layout.createParallelGroup()
-                                                    .add(label7)
-                                                    .add(panel3Layout.createSequentialGroup()
-                                                        .add(pdfErrorCodeSpinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                                        .addPreferredGap(LayoutStyle.RELATED)
-                                                        .add(label13)))
-                                                .add(33, 33, 33)
-                                                .add(panel3Layout.createParallelGroup()
-                                                    .add(label8)
-                                                    .add(panel3Layout.createSequentialGroup()
-                                                        .add(pdfErrorDescriptionSpinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                                        .addPreferredGap(LayoutStyle.RELATED)
-                                                        .add(label14)))
-                                                .add(30, 30, 30)
-                                                .add(panel3Layout.createParallelGroup()
-                                                    .add(label9)
-                                                    .add(panel3Layout.createSequentialGroup()
-                                                        .add(pdfErrorBeginDateSpinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                                        .addPreferredGap(LayoutStyle.RELATED)
-                                                        .add(label15)))
-                                                .add(36, 36, 36)
-                                                .add(panel3Layout.createParallelGroup()
-                                                    .add(panel3Layout.createSequentialGroup()
-                                                        .add(pdfErrorEndDateSpinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                                        .addPreferredGap(LayoutStyle.RELATED)
-                                                        .add(label16))
-                                                    .add(label10)))))
-                                    .add(21, 21, 21)
+                                    .addContainerGap()
                                     .add(panel3Layout.createParallelGroup()
+                                        .add(panel3Layout.createParallelGroup(GroupLayout.TRAILING)
+                                            .add(label5)
+                                            .add(GroupLayout.LEADING, label18))
                                         .add(panel3Layout.createSequentialGroup()
+                                            .add(12, 12, 12)
+                                            .add(panel3Layout.createParallelGroup()
+                                                .add(panel3Layout.createSequentialGroup()
+                                                    .add(pdfCuntPositionSpinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                                    .addPreferredGap(LayoutStyle.RELATED)
+                                                    .add(label12))
+                                                .add(label6))
+                                            .addPreferredGap(LayoutStyle.RELATED, 1, Short.MAX_VALUE)
+                                            .add(panel3Layout.createParallelGroup()
+                                                .add(panel3Layout.createSequentialGroup()
+                                                    .add(23, 23, 23)
+                                                    .add(pdfCategoryPositionSpinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                                    .add(9, 9, 9)
+                                                    .add(label19))
+                                                .add(panel3Layout.createSequentialGroup()
+                                                    .add(29, 29, 29)
+                                                    .add(label20)))
+                                            .add(18, 18, 18)
+                                            .add(panel3Layout.createParallelGroup()
+                                                .add(panel3Layout.createSequentialGroup()
+                                                    .add(pdfErrorCodeSpinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                                    .addPreferredGap(LayoutStyle.RELATED)
+                                                    .add(label13))
+                                                .add(label7))
+                                            .add(panel3Layout.createParallelGroup()
+                                                .add(panel3Layout.createSequentialGroup()
+                                                    .addPreferredGap(LayoutStyle.RELATED, 31, Short.MAX_VALUE)
+                                                    .add(pdfErrorDescriptionSpinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                                .add(panel3Layout.createSequentialGroup()
+                                                    .add(38, 38, 38)
+                                                    .add(label8)
+                                                    .addPreferredGap(LayoutStyle.RELATED, 19, Short.MAX_VALUE)))
+                                            .add(5, 5, 5)
+                                            .add(label14)
+                                            .addPreferredGap(LayoutStyle.RELATED, 32, Short.MAX_VALUE)
+                                            .add(panel3Layout.createParallelGroup()
+                                                .add(pdfErrorBeginDateSpinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                                .add(label9))
+                                            .add(panel3Layout.createParallelGroup(GroupLayout.TRAILING)
+                                                .add(panel3Layout.createSequentialGroup()
+                                                    .add(54, 54, 54)
+                                                    .add(label10)
+                                                    .add(30, 30, 30))
+                                                .add(panel3Layout.createSequentialGroup()
+                                                    .addPreferredGap(LayoutStyle.RELATED)
+                                                    .add(label15)
+                                                    .addPreferredGap(LayoutStyle.RELATED, 27, Short.MAX_VALUE)
+                                                    .add(pdfErrorEndDateSpinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                                    .addPreferredGap(LayoutStyle.RELATED)
+                                                    .add(label16)))))
+                                    .add(18, 18, 18)
+                                    .add(panel3Layout.createParallelGroup()
+                                        .add(GroupLayout.TRAILING, panel3Layout.createSequentialGroup()
                                             .add(pdfOperatorSpinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                            .addPreferredGap(LayoutStyle.UNRELATED)
-                                            .add(label17))
-                                        .add(label11))
-                                    .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                            .addPreferredGap(LayoutStyle.RELATED)
+                                            .add(label17)
+                                            .addContainerGap())
+                                        .add(GroupLayout.TRAILING, panel3Layout.createSequentialGroup()
+                                            .add(label11)
+                                            .add(41, 41, 41))))
                         );
                         panel3Layout.setVerticalGroup(
                             panel3Layout.createParallelGroup()
@@ -790,26 +823,29 @@ public class ErrorLog extends JFrame {
                                     .add(label5)
                                     .add(30, 30, 30)
                                     .add(panel3Layout.createParallelGroup(GroupLayout.BASELINE)
-                                        .add(label6)
+                                        .add(label11)
+                                        .add(label10)
                                         .add(label7)
                                         .add(label8)
                                         .add(label9)
-                                        .add(label10)
-                                        .add(label11))
+                                        .add(label20)
+                                        .add(label6))
                                     .addPreferredGap(LayoutStyle.RELATED)
                                     .add(panel3Layout.createParallelGroup(GroupLayout.BASELINE)
-                                        .add(pdfCuntPositionSpinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                        .add(pdfOperatorSpinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                        .add(pdfCategoryPositionSpinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                        .add(label19)
                                         .add(pdfErrorCodeSpinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                        .add(label13)
                                         .add(pdfErrorDescriptionSpinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                        .add(label14)
                                         .add(pdfErrorBeginDateSpinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                         .add(pdfErrorEndDateSpinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                        .add(label12)
-                                        .add(label13)
-                                        .add(label14)
                                         .add(label15)
                                         .add(label16)
                                         .add(label17)
-                                        .add(pdfOperatorSpinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                        .add(label12)
+                                        .add(pdfCuntPositionSpinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                                     .addPreferredGap(LayoutStyle.UNRELATED)
                                     .add(label18)
                                     .addContainerGap(15, Short.MAX_VALUE))
@@ -820,12 +856,12 @@ public class ErrorLog extends JFrame {
                     panel8.setLayout(panel8Layout);
                     panel8Layout.setHorizontalGroup(
                         panel8Layout.createParallelGroup()
-                            .add(panel8Layout.createSequentialGroup()
-                                .addContainerGap(98, Short.MAX_VALUE)
-                                .add(panel8Layout.createParallelGroup()
-                                    .add(panel9, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                    .add(panel3, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .add(93, 93, 93))
+                            .add(GroupLayout.TRAILING, panel8Layout.createSequentialGroup()
+                                .addContainerGap(15, Short.MAX_VALUE)
+                                .add(panel8Layout.createParallelGroup(GroupLayout.LEADING, false)
+                                    .add(panel3, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .add(panel9, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .add(75, 75, 75))
                     );
                     panel8Layout.setVerticalGroup(
                         panel8Layout.createParallelGroup()
@@ -924,5 +960,8 @@ public class ErrorLog extends JFrame {
     private JLabel label16;
     private JLabel label17;
     private JLabel label18;
+    private JSpinner pdfCategoryPositionSpinner;
+    private JLabel label19;
+    private JLabel label20;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }
