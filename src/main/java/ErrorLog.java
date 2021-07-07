@@ -21,7 +21,7 @@ public class ErrorLog extends JFrame {
     private DefaultTableModel tableModel;
     private JDialog dialog;
     private HMI connection;
-    private boolean licenseStatus;
+
 
     public ErrorLog() throws UnsupportedLookAndFeelException {
         UIManager.setLookAndFeel(new FlatDarkLaf());
@@ -37,8 +37,7 @@ public class ErrorLog extends JFrame {
 
     private boolean checkPossibleToRunProgram(){
         License license = new License();
-        licenseStatus = license.getLicenseStatus();
-        return licenseStatus;
+        return license.getLicenseStatus();
     }
 
     //Изменение размера ячеек таблицы по ширине содержимого
@@ -68,6 +67,7 @@ public class ErrorLog extends JFrame {
     public void prepareUIComponents() {
         initTableModel();
         setDateInSpinner();
+        errorCategorySetAllCheckBox();
     }
 
    //Модель отображения таблицы ошибок
@@ -76,6 +76,8 @@ public class ErrorLog extends JFrame {
         tableModel.addRow(Constants.TABLEHEADER);
         errorTable.setModel(tableModel);
     }
+
+
 
     //Перевод времени в Unix Timestamp
     public long returnTimestamp(JSpinner spinner) {
@@ -127,6 +129,7 @@ public class ErrorLog extends JFrame {
     public void createReport() {
         errorReport.setReportDateBegin(returnTimestamp(spinnerDateBegin));
         errorReport.setReportDateEnd(returnTimestamp(spinnerDateEnd));
+        errorReport.setErrorCategorySelectel(getStatusCheckBoxOfErrorCategory());
         checkSelectedDateByErrors();
     }
 
@@ -267,7 +270,7 @@ public class ErrorLog extends JFrame {
     }
 
     private float[] sizePDFTableInReport(){
-        float size[] = new float[7];
+        float[] size = new float[7];
         size[0]= Float.parseFloat(pdfCuntPositionSpinner.getValue().toString());
         size[1]= Float.parseFloat(pdfCategoryPositionSpinner.getValue().toString());
         size[2]= Float.parseFloat(pdfErrorCodeSpinner.getValue().toString());
@@ -312,6 +315,39 @@ public class ErrorLog extends JFrame {
     }
 
 
+    private void errorCategorySetAllCheckBox(){
+        checkBoxCategory0.setSelected(true);
+        checkBoxCategory1.setSelected(true);
+        checkBoxCategory2.setSelected(true);
+        checkBoxCategory3.setSelected(true);
+        checkBoxCategory4.setSelected(true);
+        checkBoxCategory5.setSelected(true);
+        checkBoxCategory6.setSelected(true);
+        checkBoxCategory7.setSelected(true);
+    }
+
+    private boolean[] getStatusCheckBoxOfErrorCategory(){
+        boolean[] errorCategorySelectel = new boolean[8];
+        if (checkBoxCategory0.isSelected())
+            errorCategorySelectel[0]=true;
+        if (checkBoxCategory1.isSelected())
+            errorCategorySelectel[1]=true;
+        if (checkBoxCategory2.isSelected())
+            errorCategorySelectel[2]=true;
+        if (checkBoxCategory3.isSelected())
+            errorCategorySelectel[3]=true;
+        if (checkBoxCategory4.isSelected())
+            errorCategorySelectel[4]=true;
+        if (checkBoxCategory5.isSelected())
+            errorCategorySelectel[5]=true;
+        if (checkBoxCategory6.isSelected())
+            errorCategorySelectel[6]=true;
+        if (checkBoxCategory7.isSelected())
+            errorCategorySelectel[7]=true;
+        return errorCategorySelectel;
+    }
+
+
     private void initComponents()  {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         menuBar1 = new JMenuBar();
@@ -338,6 +374,15 @@ public class ErrorLog extends JFrame {
         errorTable = new JTable();
         panel7 = new JPanel();
         iconLabel = new JLabel();
+        panel5 = new JPanel();
+        checkBoxCategory0 = new JCheckBox();
+        checkBoxCategory1 = new JCheckBox();
+        checkBoxCategory2 = new JCheckBox();
+        checkBoxCategory4 = new JCheckBox();
+        checkBoxCategory5 = new JCheckBox();
+        checkBoxCategory6 = new JCheckBox();
+        checkBoxCategory3 = new JCheckBox();
+        checkBoxCategory7 = new JCheckBox();
         panel8 = new JPanel();
         panel9 = new JPanel();
         label3 = new JLabel();
@@ -393,7 +438,7 @@ public class ErrorLog extends JFrame {
                 menu1.add(openFileMenuItem);
 
                 //---- readDateMenuItem ----
-                readDateMenuItem.setText("\u0421\u0447\u0438\u0442\u0430\u0442\u044c \u0434\u0430\u043d\u043d\u044b\u0435");
+                readDateMenuItem.setText("\u0412\u044b\u0432\u0435\u0441\u0442\u0438 \u043e\u0442\u0447\u0435\u0442");
                 readDateMenuItem.setIcon(new ImageIcon(getClass().getResource("/icons/readData.png")));
                 readDateMenuItem.addActionListener(e -> readDateMenuItemActionPerformed(e));
                 menu1.add(readDateMenuItem);
@@ -518,15 +563,12 @@ public class ErrorLog extends JFrame {
                             panel6Layout.createParallelGroup()
                                 .add(panel6Layout.createSequentialGroup()
                                     .addContainerGap()
-                                    .add(scrollPane2, GroupLayout.DEFAULT_SIZE, 965, Short.MAX_VALUE)
-                                    .addContainerGap())
+                                    .add(scrollPane2, GroupLayout.PREFERRED_SIZE, 982, GroupLayout.PREFERRED_SIZE)
+                                    .addContainerGap(15, Short.MAX_VALUE))
                         );
                         panel6Layout.setVerticalGroup(
                             panel6Layout.createParallelGroup()
-                                .add(panel6Layout.createSequentialGroup()
-                                    .addContainerGap()
-                                    .add(scrollPane2, GroupLayout.DEFAULT_SIZE, 412, Short.MAX_VALUE)
-                                    .addContainerGap())
+                                .add(GroupLayout.TRAILING, scrollPane2, GroupLayout.DEFAULT_SIZE, 425, Short.MAX_VALUE)
                         );
                     }
 
@@ -554,6 +596,76 @@ public class ErrorLog extends JFrame {
                         );
                     }
 
+                    //======== panel5 ========
+                    {
+                        panel5.setBorder(new TitledBorder("\u041a\u0430\u0442\u0435\u0433\u043e\u0440\u0438\u044f \u043e\u0448\u0438\u0431\u043e\u043a"));
+
+                        //---- checkBoxCategory0 ----
+                        checkBoxCategory0.setText("\u041a\u0430\u0442\u0435\u0433\u043e\u0440\u0438\u044f 0");
+
+                        //---- checkBoxCategory1 ----
+                        checkBoxCategory1.setText("\u041a\u0430\u0442\u0435\u0433\u043e\u0440\u0438\u044f 1");
+
+                        //---- checkBoxCategory2 ----
+                        checkBoxCategory2.setText("\u041a\u0430\u0442\u0435\u0433\u043e\u0440\u0438\u044f 2");
+
+                        //---- checkBoxCategory4 ----
+                        checkBoxCategory4.setText("\u041a\u0430\u0442\u0435\u0433\u043e\u0440\u0438\u044f4");
+
+                        //---- checkBoxCategory5 ----
+                        checkBoxCategory5.setText("\u041a\u0430\u0442\u0435\u0433\u043e\u0440\u0438\u044f 5");
+
+                        //---- checkBoxCategory6 ----
+                        checkBoxCategory6.setText("\u041a\u0430\u0442\u0435\u0433\u043e\u0440\u0438\u044f 6");
+
+                        //---- checkBoxCategory3 ----
+                        checkBoxCategory3.setText("\u041a\u0430\u0442\u0435\u0433\u043e\u0440\u0438\u044f 3");
+
+                        //---- checkBoxCategory7 ----
+                        checkBoxCategory7.setText("\u041a\u0430\u0442\u0435\u0433\u043e\u0440\u0438\u044f 7");
+
+                        GroupLayout panel5Layout = new GroupLayout(panel5);
+                        panel5.setLayout(panel5Layout);
+                        panel5Layout.setHorizontalGroup(
+                            panel5Layout.createParallelGroup()
+                                .add(panel5Layout.createSequentialGroup()
+                                    .add(14, 14, 14)
+                                    .add(panel5Layout.createParallelGroup()
+                                        .add(checkBoxCategory3)
+                                        .add(checkBoxCategory2)
+                                        .add(checkBoxCategory1)
+                                        .add(checkBoxCategory0))
+                                    .add(28, 28, 28)
+                                    .add(panel5Layout.createParallelGroup()
+                                        .add(checkBoxCategory4)
+                                        .add(checkBoxCategory5)
+                                        .add(checkBoxCategory6)
+                                        .add(checkBoxCategory7))
+                                    .addContainerGap(34, Short.MAX_VALUE))
+                        );
+                        panel5Layout.setVerticalGroup(
+                            panel5Layout.createParallelGroup()
+                                .add(GroupLayout.TRAILING, panel5Layout.createSequentialGroup()
+                                    .add(0, 6, Short.MAX_VALUE)
+                                    .add(panel5Layout.createParallelGroup(GroupLayout.BASELINE)
+                                        .add(checkBoxCategory0)
+                                        .add(checkBoxCategory4))
+                                    .addPreferredGap(LayoutStyle.RELATED)
+                                    .add(panel5Layout.createParallelGroup(GroupLayout.BASELINE)
+                                        .add(checkBoxCategory1)
+                                        .add(checkBoxCategory5))
+                                    .addPreferredGap(LayoutStyle.RELATED)
+                                    .add(panel5Layout.createParallelGroup(GroupLayout.BASELINE)
+                                        .add(checkBoxCategory2)
+                                        .add(checkBoxCategory6))
+                                    .addPreferredGap(LayoutStyle.RELATED)
+                                    .add(panel5Layout.createParallelGroup(GroupLayout.BASELINE)
+                                        .add(checkBoxCategory3)
+                                        .add(checkBoxCategory7))
+                                    .add(14, 14, 14))
+                        );
+                    }
+
                     GroupLayout panel2Layout = new GroupLayout(panel2);
                     panel2.setLayout(panel2Layout);
                     panel2Layout.setHorizontalGroup(
@@ -561,12 +673,14 @@ public class ErrorLog extends JFrame {
                             .add(panel2Layout.createSequentialGroup()
                                 .addContainerGap()
                                 .add(panel2Layout.createParallelGroup()
-                                    .add(panel6, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .add(panel6, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                     .add(panel2Layout.createSequentialGroup()
                                         .add(panel7, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                         .add(68, 68, 68)
                                         .add(panel4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                        .addContainerGap(259, Short.MAX_VALUE))))
+                                        .addPreferredGap(LayoutStyle.RELATED)
+                                        .add(panel5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+                                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     );
                     panel2Layout.setVerticalGroup(
                         panel2Layout.createParallelGroup()
@@ -575,8 +689,10 @@ public class ErrorLog extends JFrame {
                                     .add(panel7, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                     .add(panel2Layout.createSequentialGroup()
                                         .addContainerGap()
-                                        .add(panel4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-                                .addPreferredGap(LayoutStyle.UNRELATED)
+                                        .add(panel2Layout.createParallelGroup()
+                                            .add(panel4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                            .add(panel5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
+                                .add(17, 17, 17)
                                 .add(panel6, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addContainerGap())
                     );
@@ -857,7 +973,7 @@ public class ErrorLog extends JFrame {
                     panel8Layout.setHorizontalGroup(
                         panel8Layout.createParallelGroup()
                             .add(GroupLayout.TRAILING, panel8Layout.createSequentialGroup()
-                                .addContainerGap(15, Short.MAX_VALUE)
+                                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .add(panel8Layout.createParallelGroup(GroupLayout.LEADING, false)
                                     .add(panel3, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .add(panel9, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -870,7 +986,7 @@ public class ErrorLog extends JFrame {
                                 .add(panel9, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                 .add(31, 31, 31)
                                 .add(panel3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(219, Short.MAX_VALUE))
+                                .addContainerGap(224, Short.MAX_VALUE))
                     );
                 }
                 tabbedPane4.addTab("\u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0438", panel8);
@@ -880,13 +996,14 @@ public class ErrorLog extends JFrame {
             panel1.setLayout(panel1Layout);
             panel1Layout.setHorizontalGroup(
                 panel1Layout.createParallelGroup()
-                    .add(tabbedPane4, GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
+                    .add(panel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .add(tabbedPane4, GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
+                        .add(27, 27, 27))
             );
             panel1Layout.setVerticalGroup(
                 panel1Layout.createParallelGroup()
-                    .add(panel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .add(tabbedPane4, GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE))
+                    .add(GroupLayout.TRAILING, tabbedPane4, GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
             );
         }
 
@@ -900,7 +1017,7 @@ public class ErrorLog extends JFrame {
             contentPaneLayout.createParallelGroup()
                 .add(panel1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
-        setSize(985, 695);
+        setSize(1030, 695);
         setLocationRelativeTo(getOwner());
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
@@ -930,6 +1047,15 @@ public class ErrorLog extends JFrame {
     private JTable errorTable;
     private JPanel panel7;
     private JLabel iconLabel;
+    private JPanel panel5;
+    private JCheckBox checkBoxCategory0;
+    private JCheckBox checkBoxCategory1;
+    private JCheckBox checkBoxCategory2;
+    private JCheckBox checkBoxCategory4;
+    private JCheckBox checkBoxCategory5;
+    private JCheckBox checkBoxCategory6;
+    private JCheckBox checkBoxCategory3;
+    private JCheckBox checkBoxCategory7;
     private JPanel panel8;
     private JPanel panel9;
     private JLabel label3;

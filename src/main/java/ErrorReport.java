@@ -11,6 +11,16 @@ public class ErrorReport {
     public String errordatabaseFilePath;
     public String errorReportFileNameVariant;
 
+    public boolean[] getErrorCategorySelectel() {
+        return errorCategorySelectel;
+    }
+
+    public void setErrorCategorySelectel(boolean[] errorCategorySelectel) {
+        this.errorCategorySelectel = errorCategorySelectel;
+    }
+
+    public boolean[] errorCategorySelectel;
+
     public String getErrorReportFileNameVariant() {
         return errorReportFileNameVariant;
     }

@@ -14,15 +14,15 @@ new FormModel {
 			"$sizePolicy": 1
 			"iconImage": new com.jformdesigner.model.SwingIcon( 0, "/icons/title.png" )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-				"$horizontalGroup": "par l {comp tabbedPane4::l::0:x}"
-				"$verticalGroup": "par l {seq l {space :::p, comp tabbedPane4::::0:x}}"
+				"$horizontalGroup": "par l {seq l {space :::p, comp tabbedPane4::::0:x, space :p:27:p}}"
+				"$verticalGroup": "par l {comp tabbedPane4::t::0:x}"
 			} ) {
 				name: "panel1"
 				add( new FormContainer( "javax.swing.JTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
 					name: "tabbedPane4"
 					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-						"$horizontalGroup": "par l {seq l {space :::p, par l {comp panel6:::::x, seq {comp panel7:::p::p, space :p:68:p, comp panel4:::p::p, space ::259:x}}}}"
-						"$verticalGroup": "par l {seq l {par l {comp panel7:::p::p, seq l {space :::p, comp panel4:::p::p}}, space u:::p, comp panel6:::::x, space :::p}}"
+						"$horizontalGroup": "par l {seq l {space :::p, par l {comp panel6:::p::p, seq {comp panel7:::p::p, space :p:68:p, comp panel4:::p::p, space :::p, comp panel5:::p::p}}, space :::x}}"
+						"$verticalGroup": "par l {seq l {par l {comp panel7:::p::p, seq l {space :::p, par l {comp panel4:::p::p, comp panel5:::p::p}}}, space :p:17:p, comp panel6:::::x, space :::p}}"
 					} ) {
 						name: "panel2"
 						add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
@@ -59,8 +59,8 @@ new FormModel {
 							} )
 						} )
 						add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-							"$horizontalGroup": "par l {seq l {space :::p, comp scrollPane2::::965:x, space :::p}}"
-							"$verticalGroup": "par l {seq l {space :::p, comp scrollPane2::::412:x, space :::p}}"
+							"$horizontalGroup": "par l {seq l {space :::p, comp scrollPane2:::p:982:p, space ::15:x}}"
+							"$verticalGroup": "par l {comp scrollPane2::t::425:x}"
 						} ) {
 							name: "panel6"
 							add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
@@ -82,12 +82,51 @@ new FormModel {
 								"icon": new com.jformdesigner.model.SwingIcon( 0, "/icons/data.png" )
 							} )
 						} )
+						add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+							"$horizontalGroup": "par l {seq l {space :p:14:p, par l {comp checkBoxCategory3::l:p::p, comp checkBoxCategory2::l:p::p, comp checkBoxCategory1::l:p::p, comp checkBoxCategory0:::p::p}, space :p:28:p, par l {comp checkBoxCategory4:::p::p, comp checkBoxCategory5:::p::p, comp checkBoxCategory6::l:p::p, comp checkBoxCategory7:::p::p}, space ::34:x}}"
+							"$verticalGroup": "par l {seq t {space :0:6:x, par b {comp checkBoxCategory0::b:p::p, comp checkBoxCategory4::b:p::p}, space :::p, par b {comp checkBoxCategory1::b:p::p, comp checkBoxCategory5::b:p::p}, space :::p, par b {comp checkBoxCategory2::b:p::p, comp checkBoxCategory6::b:p::p}, space :::p, par b {comp checkBoxCategory3::b:p::p, comp checkBoxCategory7::b:p::p}, space :p:14:p}}"
+						} ) {
+							name: "panel5"
+							"border": new javax.swing.border.TitledBorder( "Категория ошибок" )
+							add( new FormComponent( "javax.swing.JCheckBox" ) {
+								name: "checkBoxCategory0"
+								"text": "Категория 0"
+							} )
+							add( new FormComponent( "javax.swing.JCheckBox" ) {
+								name: "checkBoxCategory1"
+								"text": "Категория 1"
+							} )
+							add( new FormComponent( "javax.swing.JCheckBox" ) {
+								name: "checkBoxCategory2"
+								"text": "Категория 2"
+							} )
+							add( new FormComponent( "javax.swing.JCheckBox" ) {
+								name: "checkBoxCategory4"
+								"text": "Категория4"
+							} )
+							add( new FormComponent( "javax.swing.JCheckBox" ) {
+								name: "checkBoxCategory5"
+								"text": "Категория 5"
+							} )
+							add( new FormComponent( "javax.swing.JCheckBox" ) {
+								name: "checkBoxCategory6"
+								"text": "Категория 6"
+							} )
+							add( new FormComponent( "javax.swing.JCheckBox" ) {
+								name: "checkBoxCategory3"
+								"text": "Категория 3"
+							} )
+							add( new FormComponent( "javax.swing.JCheckBox" ) {
+								name: "checkBoxCategory7"
+								"text": "Категория 7"
+							} )
+						} )
 					}, new FormLayoutConstraints( null ) {
 						"title": "Отчет"
 					} )
 					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-						"$horizontalGroup": "par l {seq t {space ::15:x, par l:::p {comp panel3:::::x, comp panel9:::::x}, space :p:75:p}}"
-						"$verticalGroup": "par l {seq l {space :::x, comp panel9:::p::p, space :p:31:p, comp panel3:::p::p, space ::219:x}}"
+						"$horizontalGroup": "par l {seq t {space :::x, par l:::p {comp panel3:::::x, comp panel9:::::x}, space :p:75:p}}"
+						"$verticalGroup": "par l {seq l {space :::x, comp panel9:::p::p, space :p:31:p, comp panel3:::p::p, space ::224:x}}"
 					} ) {
 						name: "panel8"
 						add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
@@ -262,7 +301,7 @@ new FormModel {
 					} )
 					add( new FormComponent( "javax.swing.JMenuItem" ) {
 						name: "readDateMenuItem"
-						"text": "Считать данные"
+						"text": "Вывести отчет"
 						"icon": new com.jformdesigner.model.SwingIcon( 0, "/icons/readData.png" )
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "readDateMenuItemActionPerformed", true ) )
 					} )
@@ -295,7 +334,7 @@ new FormModel {
 			}
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 5, 60 )
-			"size": new java.awt.Dimension( 985, 695 )
+			"size": new java.awt.Dimension( 1030, 695 )
 		} )
 	}
 }
