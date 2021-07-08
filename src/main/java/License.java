@@ -4,6 +4,7 @@ import oshi.hardware.HardwareAbstractionLayer;
 
 public class License {
     boolean licenseStatus;
+    private String hardwareID;
 
     public boolean getLicenseStatus() {
         boolean isLicensedSoftware = false;
@@ -18,7 +19,7 @@ public class License {
         this.licenseStatus = licenseStatus;
     }
 
-    private String getHardwareID() {
+    public String getHardwareID() {
         SystemInfo sysInfo = new SystemInfo();
         HardwareAbstractionLayer hardwareLayer = sysInfo.getHardware();
         ComputerSystem csys = hardwareLayer.getComputerSystem();

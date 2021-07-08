@@ -11,6 +11,8 @@ import java.util.*;
 import java.util.Timer;
 
 import com.formdev.flatlaf.FlatDarkLaf;
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Logger;
 import org.jdesktop.layout.GroupLayout;
 import org.jdesktop.layout.LayoutStyle;
 
@@ -21,19 +23,25 @@ public class ErrorLog extends JFrame {
     private DefaultTableModel tableModel;
     private JDialog dialog;
     private HMI connection;
+    private static final Logger log = Logger.getLogger(ErrorLog.class);
 
 
     public ErrorLog() throws UnsupportedLookAndFeelException {
+        BasicConfigurator.configure();
         UIManager.setLookAndFeel(new FlatDarkLaf());
         initComponents();
+        log.info("Software was started");
         if(checkPossibleToRunProgram()){
         prepareUIComponents();
         errorReport = new ErrorReport();}
         else {
+            log.info("Invalid key. Your key is " + new License().getHardwareID());
             showAlert("Лицензионный ключ программы не прошел проверку.\n" +
                     "Возможности программы искуственно ограничены");
         }
     }
+
+
 
     private boolean checkPossibleToRunProgram(){
         License license = new License();
@@ -87,6 +95,7 @@ public class ErrorLog extends JFrame {
             date = new SimpleDateFormat(Constants.DATA_FORMAT).parse(new SimpleDateFormat(Constants.DATA_FORMAT).format(spinner.getValue()) + UTC);
             unixTime = date.getTime() / 1000;
         } catch (ParseException parseException) {
+            log.error(parseException);
             parseException.printStackTrace();
         }
         return unixTime;
@@ -121,6 +130,7 @@ public class ErrorLog extends JFrame {
             getErrorsFromDB();
             fillErrorTable();
         } else {
+            log.error("Логическая ошибка оператора. Дата начала отчета больше даты конца отчета. Начало: "+errorReport.getReportDateBegin()+ " Конец: " + errorReport.getReportDateEnd());
             showAlert("Дата начала отсчета не может быть больше даты конца отчета");
         }
     }
@@ -141,6 +151,7 @@ public class ErrorLog extends JFrame {
 
     //Окно ошибки
     public static void showError(String exception) {
+        log.error("Произошло исключение "+exception);
         JOptionPane.showMessageDialog(new JFrame(),
                 "Произошло исключение " + exception,
                 "Ошибка",
@@ -148,6 +159,7 @@ public class ErrorLog extends JFrame {
     }
 
     public static void showAlert(String message) {
+        log.info("Внимание "+message);
         JOptionPane.showMessageDialog(new JFrame(),
                 message,
                 "Внимание",
@@ -165,6 +177,7 @@ public class ErrorLog extends JFrame {
     private boolean checkDatabasePathToExist() {
         boolean result;
         result = errorReport.getErrordatabaseFilePath() != null;
+        log.info("Database is avalible ="+result);
         return result;
     }
 
@@ -222,7 +235,9 @@ public class ErrorLog extends JFrame {
                     JOptionPane.showMessageDialog(new JFrame(),
                             "Файл '" + fileChooser.getSelectedFile() +
                                     "  сохранен");
+                    log.info("Файл отчета сохранен под именем "+ fileChooser.getSelectedFile() );
                 } else {
+                    log.info("Файл с именем "+ fileChooser.getSelectedFile() + " существует" );
                     JOptionPane.showMessageDialog(new JFrame(),
                             "Файл  '" + fileChooser.getSelectedFile() +
                                     "  не был сохранен \n" +

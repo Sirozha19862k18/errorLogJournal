@@ -73,7 +73,7 @@ public class ErrorReport {
 
     //Проверка Дата начала < Даты конца
     public boolean checkSelectedDateByErrors() {
-        return reportDateBegin < reportDateEnd;
+        return reportDateBegin <= reportDateEnd;
     }
 
 
